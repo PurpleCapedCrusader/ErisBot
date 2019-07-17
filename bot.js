@@ -1,9 +1,8 @@
 ﻿
 const Discord = require('discord.js');
+const cot = new Discord.Client();
 
-const client = new Discord.Client();
-
- 
+//bot.login(token);
 
 client.on('ready', () => {
 
@@ -11,7 +10,6 @@ client.on('ready', () => {
 
 });
 
- 
 
 client.on('message', message => {
 
@@ -22,3 +20,9 @@ client.on('message', message => {
        }
 
 });
+
+
+
+
+
+client.login(process.env.BOT_TOKEN);
