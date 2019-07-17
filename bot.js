@@ -2,24 +2,28 @@
 const Discord = require('discord.js');
 const bot = new Discord.Client();
 
-bot.login(process.env.BOT_TOKEN);
+const PREFIX = '!';
 
 bot.on('ready', () => {
-
-    console.log('I am ready!');
-
+    console.log('Eris is ready!');
 });
-
 
 bot.on('message', message => {
 
-    if (message.content === 'ping') {
+    let args = message.content.substring(PREFIX.length).split(" ");
 
-       message.reply('pong');
+    switch (args[0]) {
+        case 'ping':
+            message.channel.sendMessage('pong')
+            break;
+        case 'eris':
+            message.channel.sendMessage('https://en.wikipedia.org/wiki/Eris_(mythology)')
+            break;
+    }
 
-       }
+})
 
-});
+    bot.login(process.env.BOT_TOKEN);
 
 
 
