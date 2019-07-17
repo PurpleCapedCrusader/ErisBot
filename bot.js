@@ -1,7 +1,6 @@
 ﻿
 const Discord = require('discord.js');
 const bot = new Discord.Client();
-
 const PREFIX = '!';
 
 bot.on('ready', () => {
@@ -14,15 +13,16 @@ bot.on('message', message => {
 
     switch (args[0]) {
         case 'ping':
-            message.channel.sendMessage('pong')
+            message.channel.send('pong')
             break;
         case 'eris':
-            message.channel.sendMessage('https://en.wikipedia.org/wiki/Eris_(mythology)')
+            message.channel.send('https://en.wikipedia.org/wiki/Eris_(mythology)')
             break;
+        default:
+
     }
 
 })
-
     bot.login(process.env.BOT_TOKEN);
 
 
