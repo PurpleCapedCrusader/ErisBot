@@ -74,6 +74,10 @@ bot.on('message', message => {
                 message.channel.send('Hmmm... I\'m thinking... I\'ll have to get back to you.')
                 break;
 
+            case 'log':
+                message.channel.send('Game logs are stored in this folder: **Settings > Storage > Files > Android > Data > com.Roxley.SantoriniGame > Files >** Then find the one with the right date and time.')
+                break;
+
             case 'update-list':
                 var embed = new Discord.RichEmbed()
                     .addField('**Ability text changes.**', 'There are several characters with updated ability text. ' +
