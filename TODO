@@ -1,0 +1,3 @@
+1. Add !iam-role functionality
+2. Add !play 25 functionality - set role to JOIN ME ONLINE for the number of user specified minutes then remove role.
+3. Add ONLINE NOTIFICATIONS role and integrate !play to send notification to ONLINE NOTIFICATON members
