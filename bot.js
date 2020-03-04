@@ -2,34 +2,92 @@
 const config = require("./config.json");
 var lowerCase = require('lower-case');
 const getDateStamp = require('./timeStamp.js')
+// const godRoles = require('./godRoles.js')
 const fs = require("fs");
 const bot = new Discord.Client();
 const PREFIX = config.prefix;
 let godArray = ["apollo", "artemis", "athena", "atlas", "demeter", "hephaestus", "hermes", "minotaur", "pan", "prometheus", "aphrodite", "ares", "bia", "chaos", "charon", "chronus", "circe", "dionysus", "eros", "hera", "hestia", "hypnus", "limus", "medusa", "morpheus", "persephone", "poseidon", "selene", "triton", "zeus", "aeolus", "charybdis", "clio", "europaandtalus", "gaea", "graeae", "hades", "harpies", "hecate", "moerae", "nemesis", "siren", "tartarus", "terpsichore", "urania", "achilles", "adonis", "atalanta", "bellerophon", "heracles", "jason", "medea", "odysseus", "polyphemus", "theseus", "asteria", "castorandpollux", "eris", "hippolyta", "iris", "maenads", "pegasus", "proteus", "scylla", "tyche", "hydra", "nyx"];
 
+// Ready statement
 bot.on('ready', () => {
     console.log('Eris is ready!');
+    //bot.user.setActivity(`on ${bot.guilds.size} servers`); //Sets activity under name to Playing on 2 servers
+    console.log(`Ready to serve on ${bot.guilds.size} servers, for ${bot.users.size} users.`);
 });
 
+// New member message
+bot.on('guildMemberAdd', (member) => {
+    console.log(`New User "${member.user.username}" has joined "${member.guild.name}"` );
+    //member.guild.channels.find(c => c.name === "new_members").send(`Hi ${member.user.username}, thanks for joining us.`);
+});
+
+// error catch-all
+bot.on("error", (e) => console.error(e));
+bot.on("warn", (e) => console.warn(e));
+//bot.on("debug", (e) => console.info(e));
+
+// Link to God data
 bot.godData = require("../ErisBot/godData.json");
 
-bot.on('message', message => {
+// Main Args/Response 
+bot.on('message', (message) => {
     if (!message.content.startsWith(PREFIX) || message.author.bot) return;
 
     if (message.content === '!react') {
         message.react('521813888392626216');
     }
 
-    let args = (message.content.substring(PREFIX.length).split(" "));
-    console.log (args);
-    let messageAuthorUsername = (message.author.username);
-    let messageAuthorDiscriminator = (message.author.discriminator);
+    // Add God Role (remove old god role if exists)
+    if (message.content.slice(0,4) === '!iam') {
+        if (message.channel.name === 'eris-bot') {
+            let lastLetter = message.content.length;
+            let roleRequested = message.content.slice(4, lastLetter).toLowerCase();
+            console.log(roleRequested);
 
-    console.log(messageAuthorUsername + messageAuthorDiscriminator + " looked up " + args + " # "+ godArray.indexOf(lowerCase(args[0])) + " at " + getDateStamp.time() + " on " + getDateStamp.date());
+            if (roleRequested.slice(0,6) === 'castor') {
+                roleRequested = 'castor & pollux';
+            };
+
+            if (roleRequested.slice(0,6) === 'europa') {
+                roleRequested = 'europa & talus';
+            };
+
+            if(message.guild.roles.some(r=>roleRequested.includes(r.name))) {
+                if(message.member.roles.some(r=>roleRequested.includes(r.name))) { // has one of the roles
+                    let member = message.member;
+                    const getGodRole = member.roles.find(role => roleRequested.includes(role.name)); //get name of current God Role
+                    member.removeRole(getGodRole).catch(console.error);
+                    console.log('role removed');
+                    message.channel.send(message.author.username + " has left the " + roleRequested + " role group.")
+                } else {
+                    let member = message.member;
+                    const getGodRole = message.guild.roles.find(role => roleRequested.includes(role.name));
+                    member.addRole(getGodRole).catch(console.error);
+                    console.log('role added');
+                    message.channel.send(message.author.username + " has joined the " + roleRequested + " role group.")
+                }
+            } else {
+                message.channel.send(roleRequested + " isn\'t a role. Please check the spelling and try again.")
+            }
+        } else {
+            message.channel.send("Head over to the #eris-bot channel for role updates.")
+            console.log('tried to change role from wrong channel');
+        }
+    };
+
+    let args = message.content.substring(PREFIX.length).split(/ +/g);
+    const flargs = message.content.slice(PREFIX.length).trim().split(/ +/g);
+    const command = flargs.shift().toLowerCase();
+    console.log ("args = " + args);
+    console.log ("command = " + command);
+    
+    // Info about author for console
+    let messageAuthorINFO = (bot.users.get(message.author.id));
+    console.log(messageAuthorINFO.username + messageAuthorINFO.discriminator + " (id = " + messageAuthorINFO.id + " ) looked up " + args + " # "+ godArray.indexOf(lowerCase(args[0])) + " at " + getDateStamp.time() + " on " + getDateStamp.date());
 
     if (godArray.indexOf(lowerCase(args[0])) >= 0 || godArray.indexOf(lowerCase(args[0])) <= 66) {
         args[0] = lowerCase(args[0]);
-        console.log (args[0]);
+        //console.log ("args[0] = " + args[0]);
 
         switch (args[0]) {
             case 'rules':
@@ -93,22 +151,18 @@ bot.on('message', message => {
                 message.channel.send('Share this link to invite someone here: https://discordapp.com/invite/9PKUp7C')
                 break;
 
-            case 'test': //repeat after interval
+            case 'hello': //repeat after interval
                 var myInt = setInterval(function () {
                     message.channel.send('Hello');
                 }, 3000);
                 break;
 
-            case 'time':
-                let ts = Date.now();
-                let date_ob = new Date(ts);
-                let seconds= date_ob.getSeconds();
-                let minutes= date_ob.getMinutes();
-                let hours = date_ob.getHours();
-                let date = date_ob.getDate();
-                let month = date_ob.getMonth() + 1;
-                let year = date_ob.getFullYear();
-                message.channel.send('The time is ' + hours + ':' + minutes + ':' + seconds + ' on ' + month + "-" + date + "-" + year)
+            case '❤️':
+                message.channel.send('Awww, a ❤️. How sweet!!')
+                break;
+
+            case 't':
+                bot.emit("guildMemberAdd", message.member);
                 break;
 
             case 'order':    
@@ -215,19 +269,20 @@ bot.on('message', message => {
                 '**!invite** (discord invite link)\n\u200b' +
                 '**!order** (Power Order Aid for 2-Player Games)\n\u200b' +
                 '**!apollo** (information about Apollo... this works for all Gods and Heroes)\n\u200b' +
+                '**!iamGodName** (!iamApollo, for example, will add or remove the Apollo role. You will appear in the Member List in your first role alphabetically.)\n\u200b' +
                 ' \n\u200b' +
                 'If you don\'t want to message her in a public channel, you can DM her and she\'ll respond to you privately.')
                 break;
                 
             case 'board':
                 const file = new Discord.Attachment('../ErisBot/images/santoriniBoard.jpg');
-                const exampleEmbed = {
+                const imageEmbed = {
                     title: 'Santorini Board Notation',
                     image: {
                         url: 'attachment://santoriniBoard.jpg',
                     },
                 };
-                message.channel.send({ files: [file], embed: exampleEmbed });
+                message.channel.send({ files: [file], embed: imageEmbed });
                 break;
 
             case 'update-list':
@@ -253,7 +308,7 @@ bot.on('message', message => {
             case 'update-info': // todo: make this response a DM back to the author
                 var arrayLength = godArray.length;
                 for (var i = 0; i < arrayLength; i++) {
-                    console.log(bot.godData[i].update);
+                    //console.log(bot.godData[i].update);
                     if (bot.godData[i].update == "Updated") {
                         const embed = new Discord.RichEmbed()
                             .attachFiles(['../ErisBot/images/' + (bot.godData[i].imageName) + '.jpg'])
@@ -277,8 +332,7 @@ bot.on('message', message => {
                     //console.log(godArray[i]);
                     if (godArray[i] == (lowerCase(args[0]))) {
                         var godSearched = godArray.indexOf(lowerCase(args[0]));
-                        console.log("godSearched = " + godSearched);
-                        console.log("args[0] = " + args[0]);
+                        //console.log("godSearched = " + godSearched);
                         // console.log("args[1] = " + args[1]);
                         if (bot.godData[godSearched].update == "Updated") {
                             const embed = new Discord.RichEmbed()
@@ -317,4 +371,5 @@ bot.on('message', message => {
         return;
     }
 })
+// Super Secret Token!!!
 bot.login(config.token);

@@ -1,0 +1,3 @@
+const godRoleArray = ['Achilles', 'Adonis', 'Aeolus', 'Aphrodite', 'Apollo', 'Ares', 'Artemis', 'Asteria', 'Atalanta', 'Athena', 'Atlas', 'Bellerophon', 'Bia', 'Castor & Pollux', 'Chaos', 'Charon', 'Charybdis', 'Chronus', 'Circe', 'Clio', 'Demeter', 'Dionysus', 'Eris', 'Eros', 'Europa & Talus', 'Gaea', 'Graeae', 'Hades', 'Harpies', 'Hecate', 'Hephaestus', 'Hera', 'Heracles', 'Hermes', 'Hestia', 'Hippolyta', 'Hydra', 'Hypnus', 'Iris', 'Jason', 'Limus', 'Maenads', 'Medea', 'Medusa', 'Minotaur', 'Morpheus', 'Nemesis', 'Nyx', 'Odysseus', 'Pan', 'Pegasus', 'Persephone', 'Polyphemus', 'Poseidon', 'Prometheus', 'Proteus', 'Scylla', 'Selene', 'Siren', 'Tartarus', 'Terpsichore', 'Theseus', 'Triton', 'Tyche', 'Urania', 'Zeus'];
+
+module.exports = godRoleArray;
