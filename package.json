@@ -20,8 +20,9 @@
   },
   "homepage": "https://github.com/PurpleCapedCrusader/ErisBot#readme",
   "dependencies": {
-    "dblapi.js": "^2.3.0",
-    "discord.js": "^11.5.1",
+    "check-types": "^11.1.2",
+    "dblapi.js": "^2.4.0",
+    "discord.js": "^11.6.1",
     "lower-case": "^1.1.4",
     "request": "2.81.0"
   }

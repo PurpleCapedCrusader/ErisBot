@@ -1,6 +1,7 @@
 ﻿const Discord = require('discord.js');
 const config = require("./config.json");
 var lowerCase = require('lower-case');
+var check = require('check-types');
 // const getDateStamp = require('./timeStamp.js')
 // const recordInteraction = require('./interactionArchive.js')
 // const godRoles = require('./godRoles.js')
@@ -82,15 +83,9 @@ bot.on('message', (message) => {
     if (message.content.slice(0,7).toLowerCase() === '!online') {
         if (message.channel.name === 'eris-bot') {
             const args = message.content.slice(PREFIX.length).toLowerCase().trim().split(/ +/g);
-            let durationRequested = args[1];
-              
-            if (Number.isInteger(23)) {
-                
-                // let durationRequested = args[1];
-                // if ((durationRequested > 60 ) || (durationRequested < 1)) {
-                //     message.channel.send(args[1] + "You must use a whole number between 1 and 60.")
-                //     return;
-                // };
+            var durationRequested = Number(args[1]);
+
+            if ((check.integer(Number(durationRequested))) && (check.between(Number(durationRequested), 0, 61))) {
                 
                 let timeOfRequest = Date.now()
 
@@ -107,21 +102,16 @@ bot.on('message', (message) => {
                     if (err) {
                         console.log('Error writing file', err)
                     } else {
-                        console.log('Successfully wrote file')
+                        message.reply(" you'll be in the JOIN ME ONLINE role group for the next " + durationRequested + " minutes.");
+                        console.log('Successfully wrote file');
                     }
                 })
             } else {
-                message.channel.send(args[1] + " You must use a whole numbers that is no more than 60")
+                message.channel.send(args[1] + " is not a valid input. You must use a whole number that is no more than 60")
                 return;
             }
         }
     };
-
-
-
-
-
-
 
     let args = message.content.substring(PREFIX.length).split(/ +/g);
     const flargs = message.content.slice(PREFIX.length).trim().split(/ +/g);
