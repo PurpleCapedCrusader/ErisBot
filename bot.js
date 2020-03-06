@@ -1,7 +1,8 @@
 ﻿const Discord = require('discord.js');
 const config = require("./config.json");
 var lowerCase = require('lower-case');
-const getDateStamp = require('./timeStamp.js')
+// const getDateStamp = require('./timeStamp.js')
+// const recordInteraction = require('./interactionArchive.js')
 // const godRoles = require('./godRoles.js')
 const fs = require("fs");
 const bot = new Discord.Client();
@@ -10,9 +11,8 @@ let godArray = ["apollo", "artemis", "athena", "atlas", "demeter", "hephaestus",
 
 // Ready statement
 bot.on('ready', () => {
-    console.log('Eris is ready!');
-    //bot.user.setActivity(`on ${bot.guilds.size} servers`); //Sets activity under name to Playing on 2 servers
-    console.log(`Ready to serve on ${bot.guilds.size} servers, for ${bot.users.size} users.`);
+    console.log(`ErisBot is ready to serve on ${bot.guilds.size} servers, for ${bot.users.size} users.`)
+    bot.user.setActivity("Santorini", {type: "Playing"});    
 });
 
 // New member message
@@ -27,22 +27,25 @@ bot.on("warn", (e) => console.warn(e));
 //bot.on("debug", (e) => console.info(e));
 
 // Link to God data
-bot.godData = require("../ErisBot/godData.json");
+bot.godData = require("./godData.json");
 
 // Main Args/Response 
 bot.on('message', (message) => {
-    if (!message.content.startsWith(PREFIX) || message.author.bot) return;
+
+    if (!message.content.startsWith(PREFIX) || message.author.bot) {
+        return;
+    }
 
     if (message.content === '!react') {
         message.react('521813888392626216');
     }
 
     // Add God Role (remove old god role if exists)
-    if (message.content.slice(0,4) === '!iam') {
+    if (message.content.slice(0,4).toLowerCase() === '!iam') {
         if (message.channel.name === 'eris-bot') {
             let lastLetter = message.content.length;
             let roleRequested = message.content.slice(4, lastLetter).toLowerCase();
-            console.log(roleRequested);
+            console.log(roleRequested + " " + GetTimeStamp());
 
             if (roleRequested.slice(0,6) === 'castor') {
                 roleRequested = 'castor & pollux';
@@ -57,13 +60,13 @@ bot.on('message', (message) => {
                     let member = message.member;
                     const getGodRole = member.roles.find(role => roleRequested.includes(role.name)); //get name of current God Role
                     member.removeRole(getGodRole).catch(console.error);
-                    console.log('role removed');
+                    console.log('role removed' + GetTimeStamp());
                     message.channel.send(message.author.username + " has left the " + roleRequested + " role group.")
                 } else {
                     let member = message.member;
                     const getGodRole = message.guild.roles.find(role => roleRequested.includes(role.name));
                     member.addRole(getGodRole).catch(console.error);
-                    console.log('role added');
+                    console.log('Role added' + GetTimeStamp());
                     message.channel.send(message.author.username + " has joined the " + roleRequested + " role group.")
                 }
             } else {
@@ -75,6 +78,51 @@ bot.on('message', (message) => {
         }
     };
 
+    // Add Online Role and remove after a time
+    if (message.content.slice(0,7).toLowerCase() === '!online') {
+        if (message.channel.name === 'eris-bot') {
+            const args = message.content.slice(PREFIX.length).toLowerCase().trim().split(/ +/g);
+            let durationRequested = args[1];
+              
+            if (Number.isInteger(23)) {
+                
+                // let durationRequested = args[1];
+                // if ((durationRequested > 60 ) || (durationRequested < 1)) {
+                //     message.channel.send(args[1] + "You must use a whole number between 1 and 60.")
+                //     return;
+                // };
+                
+                let timeOfRequest = Date.now()
+
+                const onlineRequest = {
+                    'messageAuthorUsername': message.author.username,
+                    'messageAuthorId': message.author.id,
+                    'startTime': timeOfRequest,
+                    'durationRequested': durationRequested,
+                    'removeTime': timeOfRequest + (durationRequested * 60000),
+                    'status': "online or true"
+                }
+                const jsonString = JSON.stringify(onlineRequest, null, 2);
+                fs.appendFile('./onlineRoleTimer.json', jsonString, err => {
+                    if (err) {
+                        console.log('Error writing file', err)
+                    } else {
+                        console.log('Successfully wrote file')
+                    }
+                })
+            } else {
+                message.channel.send(args[1] + " You must use a whole numbers that is no more than 60")
+                return;
+            }
+        }
+    };
+
+
+
+
+
+
+
     let args = message.content.substring(PREFIX.length).split(/ +/g);
     const flargs = message.content.slice(PREFIX.length).trim().split(/ +/g);
     const command = flargs.shift().toLowerCase();
@@ -83,7 +131,7 @@ bot.on('message', (message) => {
     
     // Info about author for console
     let messageAuthorINFO = (bot.users.get(message.author.id));
-    console.log(messageAuthorINFO.username + messageAuthorINFO.discriminator + " (id = " + messageAuthorINFO.id + " ) looked up " + args + " # "+ godArray.indexOf(lowerCase(args[0])) + " at " + getDateStamp.time() + " on " + getDateStamp.date());
+    console.log(messageAuthorINFO.username + messageAuthorINFO.discriminator + " (id = " + messageAuthorINFO.id + " ) looked up " + args + " # "+ godArray.indexOf(lowerCase(args[0])) + " - " + GetTimeStamp());
 
     if (godArray.indexOf(lowerCase(args[0])) >= 0 || godArray.indexOf(lowerCase(args[0])) <= 66) {
         args[0] = lowerCase(args[0]);
@@ -162,7 +210,7 @@ bot.on('message', (message) => {
                 break;
 
             case 't':
-                bot.emit("guildMemberAdd", message.member);
+                
                 break;
 
             case 'order':    
@@ -371,5 +419,10 @@ bot.on('message', (message) => {
         return;
     }
 })
+
+function GetTimeStamp() {
+    let now = new Date();
+    return "["+now.toLocaleString()+"]";
+}
 // Super Secret Token!!!
 bot.login(config.token);
