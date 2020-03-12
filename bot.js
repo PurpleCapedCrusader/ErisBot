@@ -1,5 +1,6 @@
 ﻿const Discord = require('discord.js');
 const config = require("./config.json");
+var dbCreds = require ('./dbCreds.js');
 var lowerCase = require('lower-case');
 var check = require('check-types');
 // const getDateStamp = require('./timeStamp.js')
@@ -13,7 +14,7 @@ let godArray = ["apollo", "artemis", "athena", "atlas", "demeter", "hephaestus",
 // Ready statement
 bot.on('ready', () => {
     console.log(`ErisBot is ready to serve on ${bot.guilds.size} servers, for ${bot.users.size} users.`)
-    bot.user.setActivity("Santorini", {type: "Playing"});    
+    bot.user.setActivity("Santorini", {type: "Playing"});
 });
 
 // New member message
@@ -29,6 +30,123 @@ bot.on("warn", (e) => console.warn(e));
 
 // Link to God data
 bot.godData = require("./godData.json");
+
+
+
+
+
+
+
+
+
+// // JOIN ME ONLINE Interval check
+// setInterval(function(){
+// // 	// let timeNow=new Date().getTime();
+// // 	// let dbTime="";
+// // 	// let daysLeft="";
+// //     // let notify="";
+
+//     fs.readFile('./onlineRoleTimer.json', 'utf8', (err, fileContents) => {
+//         if (err) {
+//           console.error(err)
+//           return
+//         }
+//         try {
+//           const data = JSON.parse(fileContents)
+//           console.log(data.users[1].readableTimeStamp);
+//         } catch(err) {
+//           console.error(err)
+//         }
+        
+//       })
+    
+// // 	// console.log( GetTimestamp() + "[ADMIN] Stored accounts checked for expiry and nofication.");
+// },10000);
+// // 86400000 = 1day
+// // 3600000 = 1hr
+// // 60000 = 1min
+
+
+
+
+
+
+
+    
+// 	sql.all(`SELECT * FROM temporary_roles`).then(rows => {
+// 		if (!rows) {
+// 			return console.info("No one is in the DataBase");
+// 		}
+// 		else {
+// 			for(rowNumber="0"; rowNumber<rows.length; rowNumber++){
+// 				dbTime=rows[rowNumber].endDate;
+// 				notify=rows[rowNumber].notified;
+// 				daysLeft=(dbTime*1)-(timeNow*1);
+
+// 				let rName=bot.guilds.get(config.serverID).roles.find(rName => rName.name === rows[rowNumber].temporaryRole); 
+// 				member=bot.guilds.get(config.serverID).members.get(rows[rowNumber].userID); 
+				
+// 				// CHECK IF THEIR ACCESS HAS EXPIRED
+// 				if(daysLeft<1){
+// 					if(!member){ 
+// 						member.user.username="<@"+rows[rowNumber].userID+">"; member.id=""; 
+// 					}
+
+// 					// REMOVE ROLE FROM MEMBER IN GUILD
+// 					member.removeRole(rName).catch(console.error);
+					
+// 					bot.channels.get(config.mainChannelID).send("⚠ "+member.user.username+" has **lost** their role of: **"
+// 						+rows[rowNumber].temporaryRole+"** - their **temporary** access has __EXPIRED__ 😭 ").catch(console.error);
+
+// 					// REMOVE DATABASE ENTRY
+// 					sql.get(`DELETE FROM temporary_roles WHERE userID="${rows[rowNumber].userID}"`).catch(console.error);
+
+// 					console.log(GetTimestamp()+"[ADMIN] [TEMPORARY-ROLE] \""+member.user.username+"\" ("+member.id+") have lost their role: "+rows[rowNumber].temporaryRole+"... time EXPIRED");
+// 				}
+				
+// 				// CHECK IF THEIR ONLY HAVE 5 DAYS LEFT
+// 				if(daysLeft<432000000 && notify=="0"){
+// 					if(!member){ 
+// 						member.user.username="<@"+rows[rowNumber].userID+">"; member.id=""; 
+// 					}
+
+// 					// NOTIFY THE USER IN DM THAT THEY WILL EXPIRE
+// 					member.send("Hello "+member.user.username+"! Your role of **"+rows[rowNumber].temporaryRole+"** on "+bot.guilds.get(config.serverID)+" will be removed in less than 5 days. "
+// 								+"If you would like to keep the role, please notify an admin. "
+// 								+"You can use the `!help` command on the server for more information.").catch(error => {
+// 						console.error(GetTimestamp()+"Failed to send a DM to user: "+member.id);
+// 					});
+					
+// 					// NOTIFY THE ADMINS OF THE PENDING EXPIRY
+// 					bot.channels.get(config.mainChannelID).send("⚠ "+member.user.username+" will lose their role of: **"+rows[rowNumber].temporaryRole+"** in less than 5 days").catch(console.error);
+					
+// 					// UPDATE THE DB TO REMEMBER THAT THEY WERE NOTIFIED
+// 					sql.get(`UPDATE temporary_roles SET notified=1 WHERE userID="${rows[rowNumber].userID}"`);
+
+// 					console.log(GetTimestamp()+"[ADMIN] [TEMPORARY-ROLE] \""+member.user.username+"\" ("+member.id+") has been notified that they will lose their role in less than 5 days");
+// 				}
+// 			}
+// 		}
+// 	}).catch(console.error);
+// 	//console.log(GetTimestamp()+"[ADMIN] Stored accounts checked for expiry and nofication.");
+// },60000);
+// // 86400000 = 1day
+// // 3600000 = 1hr
+// // 60000 = 1min
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // Main Args/Response 
 bot.on('message', (message) => {
@@ -92,12 +210,13 @@ bot.on('message', (message) => {
                 const onlineRequest = {
                     'messageAuthorUsername': message.author.username,
                     'messageAuthorId': message.author.id,
+                    'readableTimeStamp': GetTimeStamp(),
                     'startTime': timeOfRequest,
                     'durationRequested': durationRequested,
                     'removeTime': timeOfRequest + (durationRequested * 60000),
                     'status': "online or true"
                 }
-                const jsonString = JSON.stringify(onlineRequest, null, 2);
+                const jsonString = JSON.stringify(onlineRequest, null, 3);
                 fs.appendFile('./onlineRoleTimer.json', jsonString, err => {
                     if (err) {
                         console.log('Error writing file', err)
