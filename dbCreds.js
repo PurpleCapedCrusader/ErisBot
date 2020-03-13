@@ -1,4 +1,3 @@
-var pg = require('pg');
 const config = require("./config.json");
 
 var dbCreds = {
@@ -11,5 +10,4 @@ var dbCreds = {
   idleTimeoutMillis: config.connIdleTimeoutMillis,
 };
 
-//var dbConn = new pg.dbConn(dbCreds);
 module.exports = dbCreds;
