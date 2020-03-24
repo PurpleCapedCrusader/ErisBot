@@ -1,5 +1,7 @@
 TODO
 1. DONE - Add !iam-role functionality
-2. Add !online 25 functionality - set role to JOIN ME ONLINE for the number of user specified minutes then remove role. https://github.com/jonathonor/expireBot/blob/master/expirebot.js
+2. DONE -  !online 25 functionality - set role to JOIN ME ONLINE for the number of user specified minutes then remove role. https://github.com/jonathonor/expireBot/blob/master/expirebot.js
 3. Add ONLINE NOTIFICATIONS role and integrate !online to send notification to ONLINE NOTIFICATON member
-
+4. Maybe add instagram feed - https://github.com/axios/axios
+5. DONE - !:heart: adds user to 'eris loves' role for 1 hour
+6. custom greetings from erisbot - https://github.com/discordjs/discord.js/blob/a30fc878161c497a8f71db2ee62370b59388a297/docs/examples/greeting.js

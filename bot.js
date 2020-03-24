@@ -1,4 +1,5 @@
 ﻿const Discord = require('discord.js');
+const express = require('express');
 const config = require("./config.json");
 var dbCreds = require ('./dbCreds.js');
 var lowerCase = require('lower-case');
@@ -35,6 +36,7 @@ bot.godData = require("./godData.json");
 
 // JOIN ME ONLINE Interval check
 setInterval(function(){
+    // console.log("running removeTempOnlineRole at " + GetTimeStamp());
     removeTempOnlineRole()
 },60000);
 // 86400000 = 1day
@@ -43,6 +45,12 @@ setInterval(function(){
 
 // Main Args/Response 
 bot.on('message', (message) => {
+
+    // messageArchive(message);
+
+    if (!message.author.bot) {
+        messageArchive(message)
+    }
 
     if (!message.content.startsWith(PREFIX) || message.author.bot) {
         return;
@@ -69,6 +77,8 @@ bot.on('message', (message) => {
 
             if(message.guild.roles.some(r=>roleRequested.includes(r.name))) {
                 if(message.member.roles.some(r=>roleRequested.includes(r.name))) { // has one of the roles
+                    // console.log(message.guild.roles);
+                    // console.log(message.member.roles);
                     let member = message.member;
                     const getGodRole = member.roles.find(role => roleRequested.includes(role.name)); //get name of current God Role
                     member.removeRole(getGodRole).catch(console.error);
@@ -94,9 +104,11 @@ bot.on('message', (message) => {
     if (message.content.slice(0,7).toLowerCase() === '!online') {
         if (message.channel.name === 'eris-bot') {
             const args = message.content.slice(PREFIX.length).toLowerCase().trim().split(/ +/g);
+            var roleRequested = "join me online";
+            var roleRequested_id = config.online_role_id;
             var durationRequested = Number(args[1]);
             if ((check.integer(Number(durationRequested))) && (check.between(Number(durationRequested), 0, 61))) {
-                setTempOnlineRole(durationRequested, message)
+                setTempOnlineRole(durationRequested, message, roleRequested, roleRequested_id)
             } else {
                 message.channel.send(args[1] + " is not a valid input. You must use a whole number that is no more than 60")
                 return;
@@ -119,29 +131,22 @@ bot.on('message', (message) => {
         //console.log ("args[0] = " + args[0]);
 
         switch (args[0]) {
-            case 'rules':
-                var embed = new Discord.RichEmbed()
-                    .addField('**Normal Rules**', 'and conditions still apply to you when using a God Power, with the exception of the specific changes described by the God Power. \n\u200b')
-                    .addField('**You must obey**', 'all God Power text that says you “cannot” or “must”, otherwise you lose the game. \n\u200b')
-                    .addField('**Domes are not blocks.**', 'If the God Power description states it affects blocks, it does not affect domes. \n\u200b')
-                    .addField('**“Forced” is not “moved”.**', 'Some God Powers may cause Workers to be “forced” into another space. A Worker that is forced, is not considered to have moved. Remember: to win the game by moving onto the third level, your Worker must move up during your turn. Therefore, if your Worker is Forced onto the third level, you do not win the game. Moving from one third level space to another also does not trigger a win. \n\u200b')
-                    .addField('**God Powers apply**', 'or are triggered at a specific time, according to what is stated at the start in the God Power’s description. For example, Apollo’s God Power description starts with “Your Move”. This means if you possess Apollo’s God Power, it can only be used by you during the “move” phase of your turn. When using a God Power, all text in its description is written from the perspective of the player possessing the God Power. Any time an “opponent” is mentioned in a God Power description, it is referring an opponent of the player possessing the God Power. \n\u200b')
-                    .addField('**Additional Setup**', 'must be performed when using some God Powers. If your selected God Power features “Setup” text in the description, execute these special instructions during the game Setup. If the order players perform additional setup gives either player an advantage, execute them in turn order. \n\u200b')
-                    .addField('**Additional Win Conditions**', 'are specified by some God Powers. In addition to being able to win by moving up onto the third level during your turn, you can also win by fulfilling the “Win Condition” described. \n\u200b')
-                    .addField('**Rules PDF Download**', 'https://roxley.com/wp-content/uploads/2016/08/Santorini-Rulebook-Web-2016.08.14.pdf');
-                message.channel.send(embed).catch(console.error);
-                break;
 
-            case 'dome':
-                var embed = new Discord.RichEmbed()
-                    .addField('**Domes are not blocks.**', 'If the God Power description states it affects blocks, it does not affect domes. \n\u200b')
-                message.channel.send(embed).catch(console.error);
+            case 'app':
+                message.channel.send(
+                    'Apple App Store: https://apps.apple.com/us/app/santorini-board-game/id1456647343\n\u200b' +
+                    'Google Play Store: https://play.google.com/store/apps/details?id=com.Roxley.SantoriniGame').catch(console.error);
                 break;
-
-            case 'move':
-                var embed = new Discord.RichEmbed()
-                    .addField('**Move**', 'your selected Worker into one of the (up to) eight neighboring spaces. \n\u200b \n\u200b A Worker may move up a maximum of one level higher, move down any number of levels lower, or move along the samelevel. A Worker may not move up more than one level.')
-                message.channel.send(embed).catch(console.error);
+                
+            case 'board':
+                const boardImage = new Discord.Attachment('../ErisBot/images/santoriniBoard.jpg');
+                const boardImageEmbed = {
+                    title: 'Santorini Board Notation',
+                    image: {
+                        url: 'attachment://santoriniBoard.jpg',
+                    },
+                };
+                message.channel.send({ files: [boardImage], embed: boardImageEmbed }).catch(console.error);
                 break;
 
             case 'build':
@@ -156,46 +161,73 @@ bot.on('message', (message) => {
                 message.channel.send(embed).catch(console.error);
                 break;
 
+            case 'dome':
+            case 'domes':
+                var embed = new Discord.RichEmbed()
+                    .addField('**Domes are not blocks.**', 'If the God Power description states it affects blocks, it does not affect domes. \n\u200b')
+                message.channel.send(embed).catch(console.error);
+                break;
+
+            case 'erisbot':
+            case 'help':
+                message.channel.send('Send a message where the first word starts with "!" and then, with no space, the name of a character in the game or one of her pre-programmed trigger words.\n\u200b' + 
+                ' \n\u200b' +
+                'I\'ll respond to:\n\u200b' +
+                '**!update-list** (list of powers updated for the app)\n\u200b' +
+                '**!rules** (game rules)\n\u200b' +
+                '**!force** (definition of force from rulebook)\n\u200b' +
+                '**!move** (definition of move from rulebook)\n\u200b' +
+                '**!build** (definition of build from rulebook)\n\u200b' +
+                '**!win** (definition of win from rulebook)\n\u200b' +
+                '**!dome** (definition of dome from rulebook)\n\u200b' +
+                '**!log** (location of log files on Android devices)\n\u200b' +
+                '**!board** (image of the board with space notation)\n\u200b' +
+                '**!invite** (discord invite link)\n\u200b' +
+                '**!order** (Power Order Aid for 2-Player Games)\n\u200b' +
+                '**!apollo** (information about Apollo... this works for all Gods and Heroes)\n\u200b' +
+                '**!iamGodName** (!iamApollo, for example, will add or remove the Apollo role. You will appear in the Member List in your first role alphabetically. This command only works while in the #eris-bot channel.)\n\u200b' +
+                ' \n\u200b' +
+                'If you don\'t want to message me in a public channel, you can DM me and I\'ll respond to you privately.').catch(console.error);
+                break;
+
             case 'force':
                 var embed = new Discord.RichEmbed()
                     .addField('**“Forced” is not “moved”.**', 'Some God Powers may cause Workers to be “forced” into another space. A Worker that is forced, is not considered to have moved. Remember: to win the game by moving onto the third level, your Worker must move up during your turn. Therefore, if your Worker is Forced onto the third level, you do not win the game. Moving from one third level space to another also does not trigger a win. \n\u200b')
                 message.channel.send(embed).catch(console.error);
                 break;
 
-            case 'win':
-                var embed = new Discord.RichEmbed()
-                    .addField('**Winning the Game**', 'If one of your Workers moves up on top of level 3 during your turn, you instantly win! \n\u200b \n\u200b You must always perform a move then build on your turn. If you are unable to, you lose.')
-                message.channel.send(embed).catch(console.error);
-                break;
-
-            case 'joke':
-                message.channel.send('Hmmm... I\'m thinking... I\'ll have to get back to you.')
-                break;
-
-            case 'log':
-                message.channel.send('Game logs are stored in this folder: **Settings > Storage > Files > Android > Data > com.Roxley.SantoriniGame > Files >** Then find the one with the right date and time.')
+            case '❤️':
+                if (message.channel.name === 'eris-bot') {
+                    const args = message.content.slice(PREFIX.length).toLowerCase().trim().split(/ +/g);
+                    var roleRequested = "eris loves";
+                    var roleRequested_id = config.eris_loves_id;
+                    var durationRequested = 5;
+                    if ((check.integer(Number(durationRequested))) && (check.between(Number(durationRequested), 0, 61))) {
+                        setTempOnlineRole(durationRequested, message, roleRequested, roleRequested_id)
+                    } else {
+                        message.channel.send(args[1] + " is not a valid input. You must use a whole number that is no more than 60").catch(console.error);
+                        return;
+                    }
+                }
+                message.channel.send('Awww, a ❤️. How sweet!!').catch(console.error);
                 break;
 
             case 'invite':
-                message.channel.send('Share this link to invite someone here: https://discordapp.com/invite/9PKUp7C')
+                message.channel.send('Share this link to invite someone here: https://discordapp.com/invite/9PKUp7C').catch(console.error);
                 break;
 
-            case 'hello': //repeat after interval
-                var myInt = setInterval(function () {
-                    message.channel.send('Hello');
-                }, 3000);
+            case 'log':
+                message.channel.send('Game logs are stored in this folder: **Settings > Storage > Files > Android > Data > com.Roxley.SantoriniGame > Files >** Then find the one with the right date and time.').catch(console.error);
                 break;
 
-            case '❤️':
-                message.channel.send('Awww, a ❤️. How sweet!!')
-                break;
-
-            case 't':
-                
+            case 'move':
+                var embed = new Discord.RichEmbed()
+                    .addField('**Move**', 'your selected Worker into one of the (up to) eight neighboring spaces. \n\u200b \n\u200b A Worker may move up a maximum of one level higher, move down any number of levels lower, or move along the samelevel. A Worker may not move up more than one level.')
+                message.channel.send(embed).catch(console.error);
                 break;
 
             case 'order':    
-                message.channel.send(
+                message.channel.send( 
                     'The lower number goes first.\n\u200b' +
                     ' \n\u200b' +
                     'Achilles 10\n\u200b' +
@@ -266,52 +298,62 @@ bot.on('message', (message) => {
                     'Zeus 31\n\u200b' +
                     ' \n\u200b' +
                     'From mlvanbie\'s Santorini Power Order Aid for 2-Player Games: https://boardgamegeek.com/filepage/176006/santorini-power-order-aid-2-player-games'
-                    )
-                break;
-                    
-            case 'avatar':
-                if (!message.mentions.users.size) {
-                    return message.channel.send(`Your avatar: <${message.author.displayAvatarURL}> ${message.author.username}`);
-                }
-                const avatarList = message.mentions.users.map(user => {
-                    return `${user.username}'s avatar: <${user.displayAvatarURL}>`;
-                });
-                // send the entire array of strings as a message
-                // by default, discord.js will `.join()` the array with `\n`
-                message.channel.send(avatarList);
-                break;
-
-            case 'erisbot':
-            case 'help':
-                message.channel.send('Send a message where the first word starts with "!" and then, with no space, the name of a character in the game or one of her pre-programmed trigger words.\n\u200b' + 
-                ' \n\u200b' +
-                'She\'ll respond to:\n\u200b' +
-                '**!update-list** (list of powers updated for the app)\n\u200b' +
-                '**!rules** (game rules)\n\u200b' +
-                '**!force** (definition of force from rulebook)\n\u200b' +
-                '**!move** (definition of move from rulebook)\n\u200b' +
-                '**!build** (definition of build from rulebook)\n\u200b' +
-                '**!win** (definition of win from rulebook)\n\u200b' +
-                '**!dome** (definition of dome from rulebook)\n\u200b' +
-                '**!log** (location of log files on Android devices)\n\u200b' +
-                '**!board** (image of the board with space notation)\n\u200b' +
-                '**!invite** (discord invite link)\n\u200b' +
-                '**!order** (Power Order Aid for 2-Player Games)\n\u200b' +
-                '**!apollo** (information about Apollo... this works for all Gods and Heroes)\n\u200b' +
-                '**!iamGodName** (!iamApollo, for example, will add or remove the Apollo role. You will appear in the Member List in your first role alphabetically.)\n\u200b' +
-                ' \n\u200b' +
-                'If you don\'t want to message her in a public channel, you can DM her and she\'ll respond to you privately.')
+                    ).catch(console.error);
                 break;
                 
-            case 'board':
-                const file = new Discord.Attachment('../ErisBot/images/santoriniBoard.jpg');
-                const imageEmbed = {
-                    title: 'Santorini Board Notation',
-                    image: {
-                        url: 'attachment://santoriniBoard.jpg',
-                    },
-                };
-                message.channel.send({ files: [file], embed: imageEmbed });
+            case 'rules':
+                var embed = new Discord.RichEmbed()
+                    .addField('**Normal Rules**', 'and conditions still apply to you when using a God Power, with the exception of the specific changes described by the God Power. \n\u200b')
+                    .addField('**You must obey**', 'all God Power text that says you “cannot” or “must”, otherwise you lose the game. \n\u200b')
+                    .addField('**Domes are not blocks.**', 'If the God Power description states it affects blocks, it does not affect domes. \n\u200b')
+                    .addField('**“Forced” is not “moved”.**', 'Some God Powers may cause Workers to be “forced” into another space. A Worker that is forced, is not considered to have moved. Remember: to win the game by moving onto the third level, your Worker must move up during your turn. Therefore, if your Worker is Forced onto the third level, you do not win the game. Moving from one third level space to another also does not trigger a win. \n\u200b')
+                    .addField('**God Powers apply**', 'or are triggered at a specific time, according to what is stated at the start in the God Power’s description. For example, Apollo’s God Power description starts with “Your Move”. This means if you possess Apollo’s God Power, it can only be used by you during the “move” phase of your turn. When using a God Power, all text in its description is written from the perspective of the player possessing the God Power. Any time an “opponent” is mentioned in a God Power description, it is referring an opponent of the player possessing the God Power. \n\u200b')
+                    .addField('**Additional Setup**', 'must be performed when using some God Powers. If your selected God Power features “Setup” text in the description, execute these special instructions during the game Setup. If the order players perform additional setup gives either player an advantage, execute them in turn order. \n\u200b')
+                    .addField('**Additional Win Conditions**', 'are specified by some God Powers. In addition to being able to win by moving up onto the third level during your turn, you can also win by fulfilling the “Win Condition” described. \n\u200b')
+                    .addField('**Rules PDF Download**', 'https://roxley.com/wp-content/uploads/2016/08/Santorini-Rulebook-Web-2016.08.14.pdf');
+                message.channel.send(embed).catch(console.error);
+                break;
+
+            // case 'ping':
+            //     let currentBotPing = bot.ping;
+            //     let currentBotStatus = bot.status;
+            //     let currentBotGateway = bot.heartbeat;
+            //     console.log(currentBotPing);
+            //     console.log(currentBotStatus);
+            //     console.log(currentBotGateway);
+            //     break;
+
+            case 't1':
+                    const olympiaImage = new Discord.Attachment('../ErisBot/images/tourney.jpg');     
+                    const olympiaInfoEmbed = new Discord.RichEmbed()
+                        .attachFile(olympiaImage)
+                        .setImage('attachment://tourney.jpg')
+                        .setColor("0xFFD700")
+                        .addField("Santorini Tournament:","Welcome to Olympia")
+                        .addField('Sign up:', "https://challonge.com/tournaments/signup/7UkQuwdC35")
+                        .addField('Date:', "March 27th 2020")
+                    message.channel.send(olympiaInfoEmbed).catch(console.error);
+                break;
+                
+            case 'update-info': // todo: make this response a DM back to the author
+                var arrayLength = godArray.length;
+                for (var i = 0; i < arrayLength; i++) {
+                    //console.log(bot.godData[i].update);
+                    if (bot.godData[i].update == "Updated") {
+                        const embed = new Discord.RichEmbed()
+                            .attachFiles(['../ErisBot/images/' + (bot.godData[i].imageName) + '.jpg'])
+                            .setColor("0x" + bot.godData[i].borderColor)
+                            .addField(bot.godData[i].name, bot.godData[i].title + "\n\u200b")
+                            .addField('Ability(updated):', bot.godData[i].updatedAbilityFormatted + "\n\u200b")
+                            .addField('Ability(original):', bot.godData[i].originalAbilityFormatted + "\n\u200b")
+                            .addField('Banned Opponents:', bot.godData[i].banned + "\n\u200b")
+                            .addField('Character Category:', bot.godData[i].group + "\n\u200b")
+                            .addField('App Availability:', bot.godData[i].inAppPurchase + "\n\u200b")
+                            .addField('Compatible with', bot.godData[i].compatability)
+                            .setThumbnail('attachment://' + (bot.godData[i].imageName) + '.jpg');
+                        message.channel.send(embed).catch(console.error);
+                    }
+                }
                 break;
 
             case 'update-list':
@@ -334,27 +376,30 @@ bot.on('message', (message) => {
                 message.channel.send(embed).catch(console.error);
                 break;
 
-            case 'update-info': // todo: make this response a DM back to the author
-                var arrayLength = godArray.length;
-                for (var i = 0; i < arrayLength; i++) {
-                    //console.log(bot.godData[i].update);
-                    if (bot.godData[i].update == "Updated") {
-                        const embed = new Discord.RichEmbed()
-                            .attachFiles(['../ErisBot/images/' + (bot.godData[i].imageName) + '.jpg'])
-                            .setColor("0x" + bot.godData[i].borderColor)
-                            .addField(bot.godData[i].name, bot.godData[i].title + "\n\u200b")
-                            .addField('Ability(updated):', bot.godData[i].updatedAbilityFormatted + "\n\u200b")
-                            .addField('Ability(original):', bot.godData[i].originalAbilityFormatted + "\n\u200b")
-                            .addField('Banned Opponents:', bot.godData[i].banned + "\n\u200b")
-                            .addField('Character Category:', bot.godData[i].group + "\n\u200b")
-                            .addField('App Availability:', bot.godData[i].inAppPurchase + "\n\u200b")
-                            .addField('Compatible with', bot.godData[i].compatability)
-                            .setThumbnail('attachment://' + (bot.godData[i].imageName) + '.jpg');
-                        message.channel.send(embed).catch(console.error);
-                    }
-                }
+            case 'win':
+                var embed = new Discord.RichEmbed()
+                    .addField('**Winning the Game**', 'If one of your Workers moves up on top of level 3 during your turn, you instantly win! \n\u200b \n\u200b You must always perform a move then build on your turn. If you are unable to, you lose.')
+                message.channel.send(embed).catch(console.error);
                 break;
 
+// NON-LISTED COMMANDS
+            case 'avatar':
+                if (!message.mentions.users.size) {
+                    return message.channel.send(`Your avatar: <${message.author.displayAvatarURL}> ${message.author.username}`);
+                }
+                const avatarList = message.mentions.users.map(user => {
+                    return `${user.username}'s avatar: <${user.displayAvatarURL}>`;
+                });
+                // send the entire array of strings as a message
+                // by default, discord.js will `.join()` the array with `\n`
+                message.channel.send(avatarList).catch(console.error);
+                break;
+
+            case 'joke':
+                message.channel.send('Hmmm... I\'m thinking... I\'ll have to get back to you.').catch(console.error);
+                break;
+
+// GOD INFO - MUST GO LAST BECAUSE IT TAKES ALL CASES
             case (args[0]):
                 var arrayLength = godArray.length;
                 for (var i = 0; i < arrayLength; i++) {
@@ -376,6 +421,7 @@ bot.on('message', (message) => {
                                 .addField('Compatible with', bot.godData[godSearched].compatability)
                                 .setThumbnail('attachment://' + (bot.godData[godSearched].imageName) + '.jpg');
                             message.channel.send(embed).catch(console.error);
+                            break;
                         } else if (bot.godData[godSearched].update == "Same") {
                             const embed = new Discord.RichEmbed()
                                 .attachFiles(['../ErisBot/images/' + (bot.godData[godSearched].imageName) + '.jpg'])
@@ -388,13 +434,13 @@ bot.on('message', (message) => {
                                 .addField('Compatible with', bot.godData[godSearched].compatability)
                                 .setThumbnail('attachment://' + (bot.godData[godSearched].imageName) + '.jpg');
                             message.channel.send(embed).catch(console.error);
+                            break;
                         } else {
                             break;
 
                         }
                     }
                 }
-
         }
     } else {
         return;
@@ -410,8 +456,20 @@ async function removeTempOnlineRole() {
     ;(async () => {
         const client = await pool.connect()
         try {
-            const results = await client.query("SELECT * FROM public.onlineroletracking WHERE messageAuthorId = $1", ["223979813856083968"])
-            console.table(results.rows)
+            let currentTime = Date.now()
+            const query = await client.query(`SELECT * FROM public.onlineroletracking WHERE remove_time < ${currentTime} AND status = true`)
+            query.rows.forEach(row => {
+                let role_id = bot.guilds.get(row.guild_id).roles.find(rName => rName.id === row.temp_role_id); 
+				let member = bot.guilds.get(config.serverID).members.get(row.author_id); 
+                // console.log("role_id = " + role_id);
+                // console.log("member = " + member);
+                member.removeRole(role_id).catch(console.error);
+                client.query(`UPDATE public.onlineroletracking SET status = false WHERE onlineroletracking_id = ${row.onlineroletracking_id}`)
+                console.log(`${row.author_username} was removed from the ${row.temp_role} role group.`);
+            })
+        } catch (e) {
+            await client.query('ROLLBACK')
+            throw e
         } finally {
           // Make sure to release the client before any error handling,
           // just in case the error handling itself throws an error.
@@ -420,29 +478,78 @@ async function removeTempOnlineRole() {
       })().catch(err => console.log(err.stack))
 }
 
-async function setTempOnlineRole(durationRequested, message) {
+async function setTempOnlineRole(durationRequested, message, roleRequested, roleRequested_id) {
     ;(async () => {
         const client = await pool.connect()
         try {
             let timeOfRequest = Date.now()
             const onlineRequest = {
-                'messageAuthorUsername': message.author.username,
-                'messageAuthorId': message.author.id,
-                'readableTimeStamp': GetTimeStamp(),
-                'startTime': timeOfRequest,
-                'durationRequested': durationRequested,
-                'removeTime': timeOfRequest + (durationRequested * 60000),
+                'guild_name': message.guild.name,
+                'guild_id': message.guild.id,
+                'channel_name': message.channel.name,
+                'channel_id': message.channel.id,
+                'message_id': message.id,
+                'author_username': message.author.username,
+                'author_id': message.author.id,
+                'readable_timestamp': GetTimeStamp(),
+                'start_time': timeOfRequest,
+                'duration_requested': durationRequested,
+                'remove_time': timeOfRequest + (durationRequested * 60000),
                 'status': 1
             }
             await client.query('BEGIN')
-            const insertTempRoleRequestText = 'INSERT INTO public.onlineroletracking(messageauthorusername, messageauthorid, readabletimestamp, starttime, durationrequested, removetime, status) VALUES ($1, $2, $3, $4, $5, $6, $7)'
-            const insertTempRoleRequestValues = [onlineRequest.messageAuthorUsername, onlineRequest.messageAuthorId, onlineRequest.readableTimeStamp, onlineRequest.startTime, onlineRequest.durationRequested, onlineRequest.removeTime, onlineRequest.status]
+            const insertTempRoleRequestText = 'INSERT INTO public.onlineroletracking(guild_name, guild_id, channel_name, channel_id, message_id, author_username, author_id, temp_role, temp_role_id, readable_timestamp, start_time, duration_requested, remove_time, status) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)'
+            const insertTempRoleRequestValues = [onlineRequest.guild_name, onlineRequest.guild_id, onlineRequest.channel_name, onlineRequest.channel_id, onlineRequest.message_id, onlineRequest.author_username, onlineRequest.author_id, roleRequested, roleRequested_id, onlineRequest.readable_timestamp, onlineRequest.start_time, onlineRequest.duration_requested, onlineRequest.remove_time, onlineRequest.status]
             await client.query(insertTempRoleRequestText, insertTempRoleRequestValues)
             await client.query('COMMIT')
             let member = message.member;
-            let roleRequested = '"join me online"';
             const getGodRole = message.guild.roles.find(role => roleRequested.includes(role.name));
             member.addRole(getGodRole).catch(console.error);
+        } catch (e) {
+            await client.query('ROLLBACK')
+            throw e
+        } finally {
+          // Make sure to release the client before any error handling,
+          // just in case the error handling itself throws an error.
+          client.release()
+        }
+      })().catch(err => console.log(err.stack))
+}
+
+async function messageArchive(message) {
+    ;(async () => {
+        const client = await pool.connect()
+        try {
+            const prepMessageArchive = {
+                'readable_timestamp': GetTimeStamp(),
+                'guild_name': message.guild.name,
+                'guild_id': message.guild.id,
+                'channel_name': message.channel.name,
+                'channel_id': message.channel.id,
+                'message_id': message.id,
+                'author_id': message.author.id,
+                'author_username': message.author.username,
+                'member_nickname': message.member.nickname,
+                'message_timestamp': message.createdTimestamp,
+                'message_content': message.mentions._content
+            }
+            await client.query('BEGIN')
+            const insertMessageArchiveText = 'INSERT INTO public.messagearchive(readable_timestamp, guild_name, guild_id, channel_name, channel_id, message_id, author_id, author_username, member_nickname, message_timestamp, message_content) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)'
+            const insertMessageArchiveValues = [prepMessageArchive.readable_timestamp, prepMessageArchive.guild_name, prepMessageArchive.guild_id, prepMessageArchive.channel_name, prepMessageArchive.channel_id, prepMessageArchive.message_id, prepMessageArchive.author_id, prepMessageArchive.author_username, prepMessageArchive.member_nickname, prepMessageArchive.message_timestamp, prepMessageArchive.message_content]
+            await client.query(insertMessageArchiveText, insertMessageArchiveValues)
+            await client.query('COMMIT')
+
+            console.log('guild_name = ' + message.guild.name),
+            console.log('guild_id = ' + message.guild.id),
+            console.log('channel_name = ' + message.channel.name),
+            console.log('channel_id = ' + message.channel.id),
+            console.log('message_id = ' + message.id),
+            console.log('author_id = ' + message.author.id),
+            console.log('author_username = ' + message.author.username),
+            console.log('member_nickname = ' + message.member.nickname),
+            console.log('message_timestamp = ' + message.createdTimestamp),
+            console.log('message_content = ' + message.mentions._content)
+
         } catch (e) {
             await client.query('ROLLBACK')
             throw e
