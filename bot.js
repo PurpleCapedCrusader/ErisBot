@@ -16,7 +16,7 @@ let godArray = ["apollo", "artemis", "athena", "atlas", "demeter", "hephaestus",
 
 // Ready statement
 bot.on('ready', () => {
-    console.log(`ErisBot is ready to serve on ${bot.guilds.size} servers, for ${bot.users.size} users.`)
+    console.log(`ErisBot is ready to serve on ${bot.guilds.cache.size} servers, for ${bot.users.cache.size} users.`)
     bot.user.setActivity("Santorini", {type: "Playing"});
 });
 
@@ -36,7 +36,7 @@ bot.godData = require("./godData.json");
 
 // JOIN ME ONLINE Interval check
 setInterval(function(){
-    // console.log("running removeTempOnlineRole at " + GetTimeStamp());
+    console.log("running removeTempOnlineRole at " + GetTimeStamp());
     removeTempOnlineRole()
 },60000);
 // 86400000 = 1day
@@ -75,19 +75,19 @@ bot.on('message', (message) => {
                 roleRequested = 'europa & talus';
             };
 
-            if(message.guild.roles.some(r=>roleRequested.includes(r.name))) {
-                if(message.member.roles.some(r=>roleRequested.includes(r.name))) { // has one of the roles
+            if(message.guild.roles.cache.some(r=>roleRequested.includes(r.name))) {
+                if(message.member.roles.cache.some(r=>roleRequested.includes(r.name))) { // has one of the roles
                     // console.log(message.guild.roles);
                     // console.log(message.member.roles);
                     let member = message.member;
-                    const getGodRole = member.roles.find(role => roleRequested.includes(role.name)); //get name of current God Role
-                    member.removeRole(getGodRole).catch(console.error);
+                    const getGodRole = member.roles.cache.find(role => roleRequested.includes(role.name)); //get name of current God Role
+                    member.roles.remove(getGodRole).catch(console.error);
                     console.log('role removed' + GetTimeStamp());
                     message.channel.send(message.author.username + " has left the " + roleRequested + " role group.")
                 } else {
                     let member = message.member;
-                    const getGodRole = message.guild.roles.find(role => roleRequested.includes(role.name));
-                    member.addRole(getGodRole).catch(console.error);
+                    const getGodRole = message.guild.roles.cache.find(role => roleRequested.includes(role.name));
+                    member.roles.add(getGodRole).catch(console.error);
                     console.log('Role added' + GetTimeStamp());
                     message.channel.send(message.author.username + " has joined the " + roleRequested + " role group.")
                 }
@@ -123,7 +123,8 @@ bot.on('message', (message) => {
     console.log ("command = " + command);
     
     // Info about author for console
-    let messageAuthorINFO = (bot.users.get(message.author.id));
+    let messageAuthorINFO = message.author.id;
+    // let messageAuthorINFO = (bot.users.get(message.author.id));
     console.log(messageAuthorINFO.username + messageAuthorINFO.discriminator + " (id = " + messageAuthorINFO.id + " ) looked up " + args + " # "+ godArray.indexOf(lowerCase(args[0])) + " - " + GetTimeStamp());
 
     if (godArray.indexOf(lowerCase(args[0])) >= 0 || godArray.indexOf(lowerCase(args[0])) <= 66) {
@@ -139,7 +140,7 @@ bot.on('message', (message) => {
                 break;
                 
             case 'board':
-                const boardImage = new Discord.Attachment('../ErisBot/images/santoriniBoard.jpg');
+                const boardImage = new Discord.MessageAttachment('../ErisBot/images/santoriniBoard.jpg');
                 const boardImageEmbed = {
                     title: 'Santorini Board Notation',
                     image: {
@@ -150,20 +151,20 @@ bot.on('message', (message) => {
                 break;
 
             case 'build':
-                var embed = new Discord.RichEmbed()
+                var embed = new Discord.MessageEmbed()
                     .addField('**Build**', 'a block or dome on an unoccupied space neighboring the moved Worker. \n\u200b \n\u200bYou can build onto a level of any height, but you must choose the correct shape of block or dome for the level being built. A tower with 3 blocks and a dome is considered a “Complete Tower”.')
                 message.channel.send(embed).catch(console.error);
                 break;
 
             case 'domes':
-                var embed = new Discord.RichEmbed()
+                var embed = new Discord.MessageEmbed()
                     .addField('**Domes are not blocks.**', 'If the God Power description states it affects blocks, it does not affect domes. \n\u200b')
                 message.channel.send(embed).catch(console.error);
                 break;
 
             case 'dome':
             case 'domes':
-                var embed = new Discord.RichEmbed()
+                var embed = new Discord.MessageEmbed()
                     .addField('**Domes are not blocks.**', 'If the God Power description states it affects blocks, it does not affect domes. \n\u200b')
                 message.channel.send(embed).catch(console.error);
                 break;
@@ -191,7 +192,7 @@ bot.on('message', (message) => {
                 break;
 
             case 'force':
-                var embed = new Discord.RichEmbed()
+                var embed = new Discord.MessageEmbed()
                     .addField('**“Forced” is not “moved”.**', 'Some God Powers may cause Workers to be “forced” into another space. A Worker that is forced, is not considered to have moved. Remember: to win the game by moving onto the third level, your Worker must move up during your turn. Therefore, if your Worker is Forced onto the third level, you do not win the game. Moving from one third level space to another also does not trigger a win. \n\u200b')
                 message.channel.send(embed).catch(console.error);
                 break;
@@ -201,7 +202,7 @@ bot.on('message', (message) => {
                     const args = message.content.slice(PREFIX.length).toLowerCase().trim().split(/ +/g);
                     var roleRequested = "eris loves";
                     var roleRequested_id = config.eris_loves_id;
-                    var durationRequested = 5;
+                    var durationRequested = 60;
                     if ((check.integer(Number(durationRequested))) && (check.between(Number(durationRequested), 0, 61))) {
                         setTempOnlineRole(durationRequested, message, roleRequested, roleRequested_id)
                     } else {
@@ -221,7 +222,7 @@ bot.on('message', (message) => {
                 break;
 
             case 'move':
-                var embed = new Discord.RichEmbed()
+                var embed = new Discord.MessageEmbed()
                     .addField('**Move**', 'your selected Worker into one of the (up to) eight neighboring spaces. \n\u200b \n\u200b A Worker may move up a maximum of one level higher, move down any number of levels lower, or move along the samelevel. A Worker may not move up more than one level.')
                 message.channel.send(embed).catch(console.error);
                 break;
@@ -302,7 +303,7 @@ bot.on('message', (message) => {
                 break;
                 
             case 'rules':
-                var embed = new Discord.RichEmbed()
+                var embed = new Discord.MessageEmbed()
                     .addField('**Normal Rules**', 'and conditions still apply to you when using a God Power, with the exception of the specific changes described by the God Power. \n\u200b')
                     .addField('**You must obey**', 'all God Power text that says you “cannot” or “must”, otherwise you lose the game. \n\u200b')
                     .addField('**Domes are not blocks.**', 'If the God Power description states it affects blocks, it does not affect domes. \n\u200b')
@@ -324,9 +325,9 @@ bot.on('message', (message) => {
             //     break;
 
             case 't1':
-                    const olympiaImage = new Discord.Attachment('../ErisBot/images/tourney.jpg');     
-                    const olympiaInfoEmbed = new Discord.RichEmbed()
-                        .attachFile(olympiaImage)
+                    const olympiaImage = new Discord.MessageAttachment('../ErisBot/images/tourney.jpg');     
+                    const olympiaInfoEmbed = new Discord.MessageEmbed()
+                        .attachFiles(olympiaImage)
                         .setImage('attachment://tourney.jpg')
                         .setColor("0xFFD700")
                         .addField("Santorini Tournament:","Welcome to Olympia")
@@ -340,7 +341,7 @@ bot.on('message', (message) => {
                 for (var i = 0; i < arrayLength; i++) {
                     //console.log(bot.godData[i].update);
                     if (bot.godData[i].update == "Updated") {
-                        const embed = new Discord.RichEmbed()
+                        const embed = new Discord.MessageEmbed()
                             .attachFiles(['../ErisBot/images/' + (bot.godData[i].imageName) + '.jpg'])
                             .setColor("0x" + bot.godData[i].borderColor)
                             .addField(bot.godData[i].name, bot.godData[i].title + "\n\u200b")
@@ -357,7 +358,7 @@ bot.on('message', (message) => {
                 break;
 
             case 'update-list':
-                var embed = new Discord.RichEmbed()
+                var embed = new Discord.MessageEmbed()
                     .addField('**Ability text changes.**', 'There are several characters with updated ability text. ' +
                         'This list only includes characters with an ability text change that affects gameplay. \n\u200b' +
                         '1. Adonis \n\u200b' +
@@ -377,7 +378,7 @@ bot.on('message', (message) => {
                 break;
 
             case 'win':
-                var embed = new Discord.RichEmbed()
+                var embed = new Discord.MessageEmbed()
                     .addField('**Winning the Game**', 'If one of your Workers moves up on top of level 3 during your turn, you instantly win! \n\u200b \n\u200b You must always perform a move then build on your turn. If you are unable to, you lose.')
                 message.channel.send(embed).catch(console.error);
                 break;
@@ -409,7 +410,7 @@ bot.on('message', (message) => {
                         //console.log("godSearched = " + godSearched);
                         // console.log("args[1] = " + args[1]);
                         if (bot.godData[godSearched].update == "Updated") {
-                            const embed = new Discord.RichEmbed()
+                            const embed = new Discord.MessageEmbed()
                                 .attachFiles(['../ErisBot/images/' + (bot.godData[godSearched].imageName) + '.jpg'])
                                 .setColor("0x" + bot.godData[godSearched].borderColor)
                                 .addField(bot.godData[godSearched].name, bot.godData[godSearched].title + "\n\u200b")
@@ -423,7 +424,7 @@ bot.on('message', (message) => {
                             message.channel.send(embed).catch(console.error);
                             break;
                         } else if (bot.godData[godSearched].update == "Same") {
-                            const embed = new Discord.RichEmbed()
+                            const embed = new Discord.MessageEmbed()
                                 .attachFiles(['../ErisBot/images/' + (bot.godData[godSearched].imageName) + '.jpg'])
                                 .setColor("0x" + bot.godData[godSearched].borderColor)
                                 .addField(bot.godData[godSearched].name, bot.godData[godSearched].title + "\n\u200b")
@@ -459,11 +460,11 @@ async function removeTempOnlineRole() {
             let currentTime = Date.now()
             const query = await client.query(`SELECT * FROM public.onlineroletracking WHERE remove_time < ${currentTime} AND status = true`)
             query.rows.forEach(row => {
-                let role_id = bot.guilds.get(row.guild_id).roles.find(rName => rName.id === row.temp_role_id); 
-				let member = bot.guilds.get(config.serverID).members.get(row.author_id); 
+				let member = bot.guilds.cache.get(config.serverID).member(row.author_id); 
+                let role_id = bot.guilds.cache.get(row.guild_id).roles.cache.find(rName => rName.id === row.temp_role_id);
                 // console.log("role_id = " + role_id);
                 // console.log("member = " + member);
-                member.removeRole(role_id).catch(console.error);
+                member.roles.remove(role_id).catch(console.error);
                 client.query(`UPDATE public.onlineroletracking SET status = false WHERE onlineroletracking_id = ${row.onlineroletracking_id}`)
                 console.log(`${row.author_username} was removed from the ${row.temp_role} role group.`);
             })
@@ -502,9 +503,58 @@ async function setTempOnlineRole(durationRequested, message, roleRequested, role
             const insertTempRoleRequestValues = [onlineRequest.guild_name, onlineRequest.guild_id, onlineRequest.channel_name, onlineRequest.channel_id, onlineRequest.message_id, onlineRequest.author_username, onlineRequest.author_id, roleRequested, roleRequested_id, onlineRequest.readable_timestamp, onlineRequest.start_time, onlineRequest.duration_requested, onlineRequest.remove_time, onlineRequest.status]
             await client.query(insertTempRoleRequestText, insertTempRoleRequestValues)
             await client.query('COMMIT')
-            let member = message.member;
-            const getGodRole = message.guild.roles.find(role => roleRequested.includes(role.name));
-            member.addRole(getGodRole).catch(console.error);
+            // let member = message.member;
+            const getGodRole = message.guild.roles.cache.find(role => roleRequested.includes(role.name));
+            console.log("getGodRole = " + getGodRole);
+            message.member.roles.add(getGodRole).catch(console.error);
+
+            // let roleID = config.online_notify_role_id;
+            // let membersWithRole = message.guild.roles.get(roleID).members;
+            // console.log(`Got ${membersWithRole} members with that role.`);
+
+            for (let i = 0; i < message.guild.members.size; i++) {
+                // console.log("message = " + message)
+                if (message.guild.members[i].roles.has(config.online_notify_role_id)) { //Error on this line
+                    message.guild.members[i].user.send(`This is a test for our report command. DM the bot dev if you are not staff.`);
+                }
+            }
+
+            // message.guild.roles.get(config.online__notify_role_id).members.map(m=>m.user.tag);
+
+            // let membersWithRole = message.guild.members.filter(member => { 
+            //     return member.roles.cache("id", config.online_notify_role_id);
+            // }).map(member => {
+            //     return member.user.username;
+            // })
+            // let embed = new Discord.MessageEmbed({
+            //     "title": `Users with the ${roleRequested} role`,
+            //     "description": membersWithRole.join("\n"),
+            //     "color": 0xFFFF
+            // });
+        
+            // message.channel.send({embed});
+
+            // const ListEmbed = new Discord.MessageEmbed()
+            // .setTitle('Users with the go4 role:')
+            // .setDescription(message.guild.roles.get(config.online__notify_role_id).members.map(m=>m.user.tag).join('\n'));
+            // message.channel.send(ListEmbed);
+            // let membersWithRole = message.guild.roles.get(config.online__notify_role_id).members;
+            // console.log(`Got ${membersWithRole.size} members with that role.`);
+
+            // if (roleRequested_id === config.online_role_id) {
+            //     console.log("SEND MESSAGE TO ONLINE NOTIFY ROLE!!!")
+            //     message.guild.members.forEach( (member) => {
+            //         console.log(`entered forEach`);
+            //             if(member.roles.has(config.online__notify_role_id)) {
+            //                 member.send(`MEMBER HAS online__notify_role_id ROLE`);
+            //                 // if (member.nickname == null) {
+            //                 //     member.send(`MEMBER NICKNAME IS NULL`);
+            //                 // } else {
+            //                 //     member.send(`MEMBER NICKNAME IS NOT NULL`);
+            //                 // } 
+            //             }
+            //         })
+            // } 
         } catch (e) {
             await client.query('ROLLBACK')
             throw e
