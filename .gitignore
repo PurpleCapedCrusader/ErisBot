@@ -2,3 +2,6 @@ config.json
 /images/
 *.jpg
 messageExample.json
+dmExample.json
+santorini_config.json
+databaseBuilder.js
