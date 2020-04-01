@@ -21,7 +21,7 @@ bot.on('ready', () => {
     bot.user.setActivity("Santorini", {
         type: "Playing"
     });
-    databaseCheck.checkOnlineRoleTrackingTable;
+    databaseCheck.createDatabaseTablesIfNotExist;
 });
 
 // New member message

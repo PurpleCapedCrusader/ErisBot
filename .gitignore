@@ -4,4 +4,4 @@ config.json
 messageExample.json
 dmExample.json
 santorini_config.json
-databaseBuilder.js
+postgres_setup.txt
