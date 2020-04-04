@@ -334,7 +334,7 @@ bot.on('message', (message) => {
                             "**2.** Update either your Discord nickname or Challonge name so they match.\n\u200b" +
                             "**3.** Update your app to version 1.115 (released Jan 22 2020)\n\u200b" +
                             "**4.** Make sure you know how to set your phone/device to Do Not Disturb.\n\u200b" +
-                            "     - Calls or notifcation may cause you to get kicked from the game.\n\u200b" +
+                            "     - Calls or notification may cause you to get kicked from the game.\n\u200b" +
                             "**5.** Screen-recording is encouraged. Please share your videos with the community.\n\u200b")
                             
                 message.channel.send("**Pre-Tournament:**\n\u200b" +
@@ -360,7 +360,7 @@ bot.on('message', (message) => {
                             "     - If the rematch ends without a winner then the match will be counted as a tie and each player will get half a point.\n\u200b" +
                             "     - Players experiencing tech issues in more than 1 round may be asked to bow out of the tournament.\n\u200b" +
                             "**7.** After the match, go to Challonge.com and report the results.\n\u200b \n\u200b" +
-                            "Remember that we're all here to have fun! Please give eachother the benifit of any doubt and be positive and encouraging.");
+                            "Remember that we're all here to have fun! Please give each other the benefit of any doubt and be positive and encouraging.");
                 break;
 
             case 'update-info': // todo: make this response a DM back to the author
