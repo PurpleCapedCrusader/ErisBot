@@ -326,25 +326,41 @@ bot.on('message', (message) => {
                 message.channel.send(embed).catch(console.error);
                 break;
 
-                // case 'ping':
-                //     let currentBotPing = bot.ping;
-                //     let currentBotStatus = bot.status;
-                //     let currentBotGateway = bot.heartbeat;
-                //     console.log(currentBotPing);
-                //     console.log(currentBotStatus);
-                //     console.log(currentBotGateway);
-                //     break;
+            case 'tourney':
+            case 'tournament':
+                message.channel.send("**Santorini Tournaments Guide**\n\u200b \n\u200b" +
+                            "**Tournament Prep:**\n\u200b" +
+                            "**1.** Register: https://challonge.com/communities/santorini\n\u200b" +
+                            "**2.** Update either your Discord nickname or Challonge name so they match.\n\u200b" +
+                            "**3.** Update your app to version 1.115 (released Jan 22 2020)\n\u200b" +
+                            "**4.** Make sure you know how to set your phone/device to Do Not Disturb.\n\u200b" +
+                            "     - Calls or notifcation may cause you to get kicked from the game.\n\u200b" +
+                            "**5.** Screen-recording is encouraged. Please share your videos with the community.\n\u200b")
+                            
+                message.channel.send("**Pre-Tournament:**\n\u200b" +
+                            "**1.** Remember that we're here to have fun playing a game we all love!\n\u200b" +
+                            "**2.** Set your phone/device to Do Not Disturb.\n\u200b" +
+                            "**3.** Join the #general channel on Discord.\n\u200b" +
+                            "**4.** Login to Challonge.com\n\u200b" +
+                            "     - Check-in opens 30 min before start time.\n\u200b")
 
-            case 't1':
-                const olympiaImage = new Discord.MessageAttachment('../ErisBot/images/tourney.jpg');
-                const olympiaInfoEmbed = new Discord.MessageEmbed()
-                    .attachFiles(olympiaImage)
-                    .setImage('attachment://tourney.jpg')
-                    .setColor("0xFFD700")
-                    .addField("Santorini Tournament:", "Welcome to Olympia")
-                    .addField('Sign up:', "https://challonge.com/tournaments/signup/7UkQuwdC35")
-                    .addField('Date:', "March 27th 2020")
-                message.channel.send(olympiaInfoEmbed).catch(console.error);
+                message.channel.send("**Tournament:**\n\u200b" +
+                            "**1.** The bracket will be randomized just before start time.\n\u200b" +
+                            "**2.** Each match will show two players, one above the other. The player on top is the Host and is responsible for sending their opponent the Private Match Code.\n\u200b" +
+                            "**3.** Host player: start a Private Match and send the Private Match Code to your opponent on Discord in a DM or a Private Match - Text channel.\n\u200b" +
+                            "**4.** Both players join the match.\n\u200b" +
+                            "**5.** The app will guide you through game setup:\n\u200b" +
+                            "     - Player order is randomized.\n\u200b" +
+                            "     - Player 1 chooses 2 **DIFFERENT** gods/heroes. **NO MIRROR MATCHES**.\n\u200b" +
+                            "     - Player 2 picks the one they want to use.\n\u200b" +
+                            "**6.** Once the match starts, DO NOT leave the app until the game ends and you see the Victory/Defeat screen.\n\u200b" +
+                            "**7.** If you experience disconnection/opponent leaving/freeze/bug:\n\u200b" +
+                            "     - Notify the tournament coordinator of the issue.\n\u200b" +
+                            "     - You will be allowed to restart the match 1 time.\n\u200b" +
+                            "     - If the rematch ends without a winner then the match will be counted as a tie and each player will get half a point.\n\u200b" +
+                            "     - Players experiencing tech issues in more than 1 round may be asked to bow out of the tournament.\n\u200b" +
+                            "**7.** After the match, go to Challonge.com and report the results.\n\u200b \n\u200b" +
+                            "Remember that we're all here to have fun! Please give eachother the benifit of any doubt and be positive and encouraging.");
                 break;
 
             case 'update-info': // todo: make this response a DM back to the author
@@ -408,7 +424,7 @@ bot.on('message', (message) => {
                 break;
 
             case 'joke':
-                message.channel.send('Hmmm... I\'m thinking... I\'ll have to get back to you.').catch(console.error);
+                message.channel.send(`Hmmm... I'm thinking... I'll have to get back to you.`).catch(console.error);
                 break;
 
                 // GOD INFO - MUST GO LAST BECAUSE IT TAKES ALL CASES
