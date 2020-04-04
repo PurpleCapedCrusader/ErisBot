@@ -353,7 +353,7 @@ bot.on('message', (message) => {
                             "     - Player order is randomized.\n\u200b" +
                             "     - Player 1 chooses 2 **DIFFERENT** gods/heroes. **NO MIRROR MATCHES**.\n\u200b" +
                             "     - Player 2 picks the one they want to use.\n\u200b" +
-                            "**6.** Once the match starts, DO NOT leave the app until the game ends and you see the Victory/Defeat screen.\n\u200b" +
+                            "**6.** Once the match starts, **DO NOT leave the app until the game ends** and you see the Victory/Defeat screen.\n\u200b" +
                             "**7.** If you experience disconnection/opponent leaving/freeze/bug:\n\u200b" +
                             "     - Notify the tournament coordinator of the issue.\n\u200b" +
                             "     - You will be allowed to restart the match 1 time.\n\u200b" +
