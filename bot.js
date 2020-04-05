@@ -329,9 +329,7 @@ bot.on('message', (message) => {
             case 'tourney':
             case 'tournament':
                 message.channel.send("**Santorini Tournaments Guide**\n\u200b \n\u200b" +
-                            "```fix\n\u200b" +
                             "**Tournament Prep:**\n\u200b" +
-                            "```\n\u200b" +
                             "**1.** Register: https://challonge.com/communities/santorini\n\u200b" +
                             "**2.** Update either your Discord nickname or Challonge name so they match.\n\u200b" +
                             "**3.** Check for updates to make sure you have the most recent version of the app.\n\u200b" +
