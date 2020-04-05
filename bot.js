@@ -339,15 +339,18 @@ bot.on('message', (message) => {
                             
                 message.channel.send("**Pre-Tournament:**\n\u200b" +
                             "**1.** Remember that we're here to have fun playing a game we all love!\n\u200b" +
-                            "**2.** Set your phone/device to Do Not Disturb.\n\u200b" +
+                            "**2.** **Set your phone/device to Do Not Disturb.**\n\u200b" +
                             "**3.** Join the #general channel on Discord.\n\u200b" +
                             "**4.** Login to Challonge.com\n\u200b" +
-                            "     - Check-in opens 30 min before start time.\n\u200b")
+                            "     - Check-in opens 30 min before start time.\n\u200b" +
+                            "     - **Please check in at least 15 min before the scheduled start time.**\n\u200b")
 
                 message.channel.send("**Tournament:**\n\u200b" +
-                            "**1.** The bracket will be randomized just before start time.\n\u200b" +
+                            "**1.** When the tournament starts\n\u200b" +
+                            "     - Registrants that have not checked in will be disqualified.\n\u200b" +
+                            "     - An updated bracket will be created with the remaining players.\n\u200b" +
                             "**2.** Each match will show two players, one above the other. The player on top is the Host and is responsible for sending their opponent the Private Match Code.\n\u200b" +
-                            "**3.** Host player: start a Private Match and send the Private Match Code to your opponent on Discord in a DM or a Private Match - Text channel.\n\u200b" +
+                            "**3.** Host player: start a Private Match and send a Discord DM to your opponent with the Private Match Code \n\u200b" +
                             "**4.** Both players join the match.\n\u200b" +
                             "**5.** The app will guide you through game setup:\n\u200b" +
                             "     - Player order is randomized.\n\u200b" +
@@ -357,10 +360,10 @@ bot.on('message', (message) => {
                             "**7.** If you experience disconnection/opponent leaving/freeze/bug:\n\u200b" +
                             "     - Notify the tournament coordinator of the issue.\n\u200b" +
                             "     - You will be allowed to restart the match 1 time.\n\u200b" +
-                            "     - If the rematch ends without a winner then the match will be counted as a tie and each player will get half a point.\n\u200b" +
+                            "     - If the rematch ends without a winner then the match will be counted as a tie.\n\u200b" +
                             "     - Players experiencing tech issues in more than 1 round may be asked to bow out of the tournament.\n\u200b" +
                             "**7.** After the match, go to Challonge.com and report the results.\n\u200b \n\u200b" +
-                            "Remember that we're all here to have fun! Please give each other the benefit of any doubt and be positive and encouraging.");
+                            "Remember that **we're all here to have fun!** Please give each other the benefit of any doubt and **be positive and encouraging**.");
                 break;
 
             case 'update-info': // todo: make this response a DM back to the author
@@ -369,6 +372,7 @@ bot.on('message', (message) => {
                     //console.log(bot.godData[i].update);
                     if (bot.godData[i].update == "Updated") {
                         const embed = new Discord.MessageEmbed()
+
                             .attachFiles(['../ErisBot/images/' + (bot.godData[i].imageName) + '.jpg'])
                             .setColor("0x" + bot.godData[i].borderColor)
                             .addField(bot.godData[i].name, bot.godData[i].title + "\n\u200b")
