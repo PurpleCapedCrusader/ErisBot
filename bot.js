@@ -332,7 +332,7 @@ bot.on('message', (message) => {
                             "**Tournament Prep:**\n\u200b" +
                             "**1.** Register: https://challonge.com/communities/santorini\n\u200b" +
                             "**2.** Update either your Discord nickname or Challonge name so they match.\n\u200b" +
-                            "**3.** Update your app to version 1.115 (released Jan 22 2020)\n\u200b" +
+                            "**3.** Check for updates to make sure you have the most recent version of the app.\n\u200b" +
                             "**4.** Make sure you know how to set your phone/device to Do Not Disturb.\n\u200b" +
                             "     - Calls or notification may cause you to get kicked from the game.\n\u200b" +
                             "**5.** Screen-recording is encouraged. Please share your videos with the community.\n\u200b")
