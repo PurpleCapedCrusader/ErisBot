@@ -344,7 +344,7 @@ bot.on('message', (message) => {
                             "**4.** Login to Challonge.com\n\u200b" +
                             "     - Check-in opens 30 min before start time.\n\u200b" +
                             "     - **Please check in at least 15 min before the scheduled start time.**\n\u200b" +
-                            "     - **The tournament will start on time**.\n\u200b" +
+                            "     - **The tournament will start on time**.\n\u200b")
 
                 message.channel.send("**Tournament:**\n\u200b" +
                             "**1.** When the tournament starts\n\u200b" +
