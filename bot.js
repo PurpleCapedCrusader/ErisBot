@@ -75,11 +75,11 @@ bot.on('message', (message) => {
             // console.log(roleRequested + " " + GetTimeStamp());
 
             if (roleRequested.slice(0, 6) === 'castor') {
-                roleRequested = 'castor & pollux';
+                roleRequested = 'castorandpollux';
             };
 
             if (roleRequested.slice(0, 6) === 'europa') {
-                roleRequested = 'europa & talus';
+                roleRequested = 'europaandtalus';
             };
 
             if (message.guild.roles.cache.some(r => roleRequested.includes(r.name))) {
