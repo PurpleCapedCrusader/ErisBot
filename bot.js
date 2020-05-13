@@ -132,6 +132,14 @@ bot.on('message', (message) => {
     if (godArray.indexOf(lowerCase(args[0])) >= 0 || godArray.indexOf(lowerCase(args[0])) <= 66) {
         args[0] = lowerCase(args[0]);
         //console.log ("args[0] = " + args[0]);
+        if (args[0].slice(0, 6) === 'castor') {
+                args[0] = 'castorandpollux';
+        };
+
+        if (args[0].slice(0, 6) === 'europa') {
+            args[0] = 'europaandtalus';
+        };
+        
         switch (args[0]) {
 
             case 'app':
