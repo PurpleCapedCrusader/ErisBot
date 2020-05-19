@@ -18,9 +18,7 @@ let godArray = ["apollo", "artemis", "athena", "atlas", "demeter", "hephaestus",
 // Ready statement
 bot.on('ready', () => {
     console.log(`${GetTimeStamp()} :: ErisBot is ready to serve on ${bot.guilds.cache.size} servers, for ${bot.users.cache.size} users.`)
-    bot.user.setActivity("Santorini", {
-        type: "Playing"
-    });
+    updateStatus()
     databaseCheck.createDatabaseTablesIfNotExist;
 });
 
@@ -40,16 +38,15 @@ bot.godData = require("./godData.json");
 
 // JOIN ME ONLINE Interval check
 setInterval(function () {
-    // console.log("running removeTempOnlineRole at " + GetTimeStamp());
     removeTempOnlineRole()
 }, 60000);
 // 86400000 = 1day
 // 3600000 = 1hr
 // 60000 = 1min
 setInterval(function () {
-    // console.log("running removeTempOnlineRole at " + GetTimeStamp());
     updateStatus()
-}, 60000);
+}, 900000);
+
 // Main Args/Response 
 bot.on('message', (message) => {
 
@@ -673,7 +670,7 @@ async function dmArchive(message) {
     })().catch(err => console.log(err.stack))
 }
 
-async function updateStatus() {
+function updateStatus() {
     var watchPlay = [0, 1]
     shuffle(watchPlay);
     if (watchPlay[0] == 0) {
