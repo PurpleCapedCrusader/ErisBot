@@ -31,9 +31,7 @@ let godArray = [
 // Ready statement
 bot.on('ready', () => {
     console.log(`${GetTimeStamp()} :: ErisBot is ready to serve on ${bot.guilds.cache.size} servers, for ${bot.users.cache.size} users.`)
-    bot.user.setActivity("Santorini", {
-        type: "Playing"
-    });
+    updateStatus()
     databaseCheck.createDatabaseTablesIfNotExist;
 });
 
@@ -53,12 +51,14 @@ bot.godData = require("./godData.json");
 
 // JOIN ME ONLINE Interval check
 setInterval(function () {
-    // console.log("running removeTempOnlineRole at " + GetTimeStamp());
     removeTempOnlineRole()
 }, 60000);
 // 86400000 = 1day
 // 3600000 = 1hr
 // 60000 = 1min
+setInterval(function () {
+    updateStatus()
+}, 900000);
 
 // Main Args/Response 
 bot.on('message', (message) => {
@@ -145,6 +145,14 @@ bot.on('message', (message) => {
     if (godArray.indexOf(lowerCase(args[0])) >= 0 && godArray.indexOf(lowerCase(args[0])) <= 66) {
         args[0] = lowerCase(args[0]);
         //console.log ("args[0] = " + args[0]);
+        if (args[0].slice(0, 6) === 'castor') {
+                args[0] = 'castorandpollux';
+        };
+
+        if (args[0].slice(0, 6) === 'europa') {
+            args[0] = 'europaandtalus';
+        };
+        
         switch (args[0]) {
 
             case 'app':
@@ -673,6 +681,92 @@ async function dmArchive(message) {
             client.release()
         }
     })().catch(err => console.log(err.stack))
+}
+
+function updateStatus() {
+    var watchPlay = [0, 1]
+    shuffle(watchPlay);
+    if (watchPlay[0] == 0) {
+        var statusArray = [
+            "Santorini",
+            "Dice Throne",
+            "Dice Throne Adventures",
+            "Steampunk Rally",
+            "Steampunk Rally Fusion",
+            "Super Motherload",
+            "Brass: Birmingham",
+            "Brass: Lancashire",
+            "SKYRISE",
+            "Santorini App",
+            "Tavli",
+            "Latrunculi",
+            "Terni Lapilli",
+            "Calculi-Ludus Calculorum",
+            "Tabla Lusoria",
+            "Petteia",
+            "Senet",
+            "The Royal Game of Ur",
+            "Mancala",
+            "7 Wonders",
+            "7 Wonders Duel",
+            "Acropolis of Athens",
+            "Agamemnon",
+            "Elysium",
+            "CORINTH",
+            "LORDS OF HELLAS",
+            "ORACLE OF DELPHI",
+            "CYCLADES",
+            "Hoplite",
+            "Poseidon's Kingdom",
+            "Sid Meier's Civilization",
+            "Sparta",
+            "Through the Ages",
+            "Zeus on the Loose"
+        ];
+        shuffle(statusArray);
+        bot.user.setActivity(statusArray[0], {
+                type: 'PLAYING'
+            })
+            .then(presence => console.log(`Activity set to ${presence.activities[0].name}`))
+            .catch(console.error);
+    } else if (watchPlay[0] == 1) {
+        var statusArray = [
+            "Jason and the Argonauts",
+            "Troy",
+            "300",
+            "Atlantis",
+            "Clash of the Titans",
+            "Wrath of the Titans",
+            "The Odyssey",
+            "Hercules",
+            "Goliath and the Dragon",
+            "Odissea",
+            "The Giants of Thessaly",
+            "Fury of Achilles",
+            "Perseus Against the Monsters",
+            "Iphigenia",
+            "Rahdo Runs Through",
+            "The Undead Viking",
+            "Watch It Played",
+            "Tantrum House",
+            "Man Vs. Meeple",
+            "The Cardboard Kid",
+            "Gaming With Edo",
+            "Shut Up & Sit Down",
+            "LoadingReadyRun",
+            "Actualol",
+            "No Pun Included",
+            "Drive Thru Review",
+            "The Game Boy Geek",
+            "The Dice Tower"
+        ];
+        shuffle(statusArray);
+        bot.user.setActivity(statusArray[0], {
+                type: 'WATCHING'
+            })
+            .then(presence => console.log(`Activity set to ${presence.activities[0].name}`))
+            .catch(console.error);
+    }
 }
 // Super Secret Token!!!
 bot.login(config.token);
