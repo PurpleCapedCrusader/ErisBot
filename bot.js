@@ -52,19 +52,16 @@ bot.godData = require("./godData.json");
 // JOIN ME ONLINE Interval check
 setInterval(function () {
     removeTempOnlineRole()
-}, 60000);
-// 86400000 = 1day
-// 3600000 = 1hr
-// 60000 = 1min
+}, 60000);// 60000 = 1min
+
 setInterval(function () {
     updateStatus()
-}, 900000);
+}, 900000);// 60000 = 1min
 
 // Main Args/Response 
 bot.on('message', (message) => {
 
     if (!message.author.bot) {
-        // console.log(message)
         if (message.channel.type === "dm") {
             dmArchive(message)
         } else {
@@ -85,7 +82,6 @@ bot.on('message', (message) => {
         if (message.channel.name === 'eris-bot') {
             let lastLetter = message.content.length;
             let roleRequested = message.content.slice(4, lastLetter).toLowerCase();
-            // console.log(roleRequested + " " + GetTimeStamp());
 
             if (roleRequested.slice(0, 6) === 'castor') {
                 roleRequested = 'castor & pollux';
@@ -97,18 +93,14 @@ bot.on('message', (message) => {
 
             if (message.guild.roles.cache.some(r => roleRequested.includes(r.name))) {
                 if (message.member.roles.cache.some(r => roleRequested.includes(r.name))) { // has one of the roles
-                    // console.log(message.guild.roles);
-                    // console.log(message.member.roles);
                     let member = message.member;
                     const getGodRole = member.roles.cache.find(role => roleRequested.includes(role.name)); //get name of current God Role
                     member.roles.remove(getGodRole).catch(console.error);
-                    // console.log('role removed' + GetTimeStamp());
                     message.channel.send(message.author.username + " has left the " + roleRequested + " role group.")
                 } else {
                     let member = message.member;
                     const getGodRole = message.guild.roles.cache.find(role => roleRequested.includes(role.name));
                     member.roles.add(getGodRole).catch(console.error);
-                    // console.log('Role added' + GetTimeStamp());
                     message.channel.send(message.author.username + " has joined the " + roleRequested + " role group.")
                 }
             } else {
@@ -116,7 +108,6 @@ bot.on('message', (message) => {
             }
         } else {
             message.channel.send("Head over to the #eris-bot channel for role updates.")
-            // console.log('tried to change role from wrong channel');
         }
     };
 
@@ -125,7 +116,6 @@ bot.on('message', (message) => {
         if (message.channel.name === 'eris-bot') {
             const args = message.content.slice(PREFIX.length).toLowerCase().trim().split(/ +/g);
             var roleRequested = "Join Me Online";
-            // var roleRequested_id = config.online_role_id;
             var durationRequested = Number(args[1]);
             if ((check.integer(Number(durationRequested))) && (check.between(Number(durationRequested), 0, 61))) {
                 setTempOnlineRole(durationRequested, message, roleRequested)
@@ -139,12 +129,9 @@ bot.on('message', (message) => {
     };
 
     let args = message.content.substring(PREFIX.length).split(/ +/g);
-    // console.log ("args = " + args);
-    // console.log(`${message.author.username} ${message.author.discriminator} id = ${message.author.id} looked up ${args} #${godArray.indexOf(lowerCase(args[0]))} - ${GetTimeStamp()}`);
 
     if (godArray.indexOf(lowerCase(args[0])) >= 0 && godArray.indexOf(lowerCase(args[0])) <= 66) {
         args[0] = lowerCase(args[0]);
-        //console.log ("args[0] = " + args[0]);
         if (args[0].slice(0, 6) === 'castor') {
                 args[0] = 'castorandpollux';
         };
@@ -220,7 +207,6 @@ bot.on('message', (message) => {
                 if (message.channel.name === 'eris-bot') {
                     const args = message.content.slice(PREFIX.length).toLowerCase().trim().split(/ +/g);
                     var roleRequested = "eris loves";
-                    // var roleRequested_id = config.eris_loves_id;
                     var durationRequested = 60;
                     setTempOnlineRole(durationRequested, message, roleRequested)
                 }
@@ -392,7 +378,6 @@ bot.on('message', (message) => {
             case 'update-info': // todo: make this response a DM back to the author
                 var arrayLength = godArray.length;
                 for (var i = 0; i < arrayLength; i++) {
-                    //console.log(bot.godData[i].update);
                     if (bot.godData[i].update == "Updated") {
                         const embed = new Discord.MessageEmbed()
 
@@ -445,8 +430,6 @@ bot.on('message', (message) => {
                 const avatarList = message.mentions.users.map(user => {
                     return `${user.username}'s avatar: <${user.displayAvatarURL}>`;
                 });
-                // send the entire array of strings as a message
-                // by default, discord.js will `.join()` the array with `\n`
                 message.channel.send(avatarList).catch(console.error);
                 break;
 
@@ -458,11 +441,8 @@ bot.on('message', (message) => {
             case (args[0]):
                 var arrayLength = godArray.length;
                 for (var i = 0; i < arrayLength; i++) {
-                    //console.log(godArray[i]);
                     if (godArray[i] == (lowerCase(args[0]))) {
                         var godSearched = godArray.indexOf(lowerCase(args[0]));
-                        //console.log("godSearched = " + godSearched);
-                        // console.log("args[1] = " + args[1]);
                         if (bot.godData[godSearched].update == "Updated") {
                             const embed = new Discord.MessageEmbed()
                                 .attachFiles(['../ErisBot/images/' + (bot.godData[godSearched].imageName) + '.jpg'])
@@ -517,8 +497,6 @@ async function removeTempOnlineRole() {
             query.rows.forEach(row => { 
                 let member = bot.guilds.cache.get(row.guild_id).member(row.author_id);
                 let role_id = bot.guilds.cache.get(row.guild_id).roles.cache.find(rName => rName.id === row.temp_role_id);
-                // console.log("role_id = " + role_id);
-                // console.log("member = " + member);
                 member.roles.remove(role_id).catch(console.error);
                 client.query(`UPDATE public.online_role_tracking SET status = false WHERE onlineroletracking_id = ${row.onlineroletracking_id}`)
                 console.log(`${row.author_username} was removed from the ${row.temp_role} role group in the ${row.guild_name} channel.`);
@@ -527,8 +505,6 @@ async function removeTempOnlineRole() {
             await client.query('ROLLBACK')
             throw e
         } finally {
-            // Make sure to release the client before any error handling,
-            // just in case the error handling itself throws an error.
             client.release()
         }
     })().catch(err => console.log(err.stack))
@@ -562,33 +538,24 @@ async function setTempOnlineRole(durationRequested, message, roleRequested) {
             await client.query(insertTempRoleRequestText, insertTempRoleRequestValues)
             await client.query('COMMIT')
             const getGodRole = message.guild.roles.cache.find(role => roleRequested.includes(role.name));
-            // console.log("getGodRole = " + getGodRole);
             message.member.roles.add(getGodRole).catch(console.error);
             // TODO update online time if not false
-            // console.log(`guild size = ${message.guild.members.cache.size}`)
             if (roleRequested == "Join Me Online") {
                 let online_notify_role_id = await message.guild.roles.cache.find(role => role.name === "Online Notify").id;
                 let membersWithRole = message.guild.roles.cache.get(online_notify_role_id).members.map(m => m.user);
-                // console.log(`membersWithRole = ${membersWithRole}`)
                 await membersWithRole.forEach((member) => {
                     console.log(`member.username = ${member.username}`)
-                    // console.log(`member.id = ${member.id}`)
-                    // console.log(`message.member.id = ${message.author.id}`)
-                    // console.log(`nickname = ${message.member.nickname}`)
                     if (member.id == message.author.id) {
                             member.send(`I told everyone in the Online Notify group that you are available for the next ${onlineRequest.duration_requested} min.`)
                     }
                     if (member.id != message.author.id) {
                         if (message.member.nickname != null) {
-                            // console.log(`message.member.nickname = ${message.member.nickname}`)
                             member.send(`${message.member.nickname} is playing Santorini online for the next ${onlineRequest.duration_requested} min. If you want me to stop sending you these updates, use the !notifyOFF command.`)
                         } else {
-                            // console.log(`message.member.username = ${message.author.username}`)
                             member.send(`${onlineRequest.author_username} is playing Santorini online for the next ${onlineRequest.duration_requested} min. If you want me to stop sending you these updates, use the !notifyOFF command.`)
                         }
                     }
                 });
-                // await message.member.send(`I've added you to the Online Notify group. I'll send you a DM when someone uses the !online command.  playing Santorini online for the next ${onlineRequest.duration_requested} min.`).catch(console.error);
                 let role = await message.guild.roles.cache.find(r => r.name === "Online Notify");
                 await message.member.roles.add(role).catch(console.error);
             }
@@ -596,11 +563,26 @@ async function setTempOnlineRole(durationRequested, message, roleRequested) {
             await client.query('ROLLBACK')
             throw e
         } finally {
-            // Make sure to release the client before any error handling,
-            // just in case the error handling itself throws an error.
             client.release()
         }
     })().catch(err => console.log(err.stack))
+}
+
+function shuffle(array) {
+    var currentIndex = array.length,
+        temporaryValue,
+        randomIndex;
+    // While there remain elements to shuffle...
+    while (0 !== currentIndex) {
+        // Pick a remaining element...
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex -= 1;
+        // And swap it with the current element.
+        temporaryValue = array[currentIndex];
+        array[currentIndex] = array[randomIndex];
+        array[randomIndex] = temporaryValue;
+    }
+    return array;
 }
 
 async function messageArchive(message) {
@@ -626,24 +608,10 @@ async function messageArchive(message) {
             const insertMessageArchiveValues = [prepMessageArchive.readable_timestamp, prepMessageArchive.guild_name, prepMessageArchive.guild_id, prepMessageArchive.channel_name, prepMessageArchive.channel_id, prepMessageArchive.message_id, prepMessageArchive.author_id, prepMessageArchive.author_username, prepMessageArchive.member_nickname, prepMessageArchive.message_timestamp, prepMessageArchive.message_content]
             await client.query(insertMessageArchiveText, insertMessageArchiveValues)
             await client.query('COMMIT')
-
-            // console.log('guild_name = ' + message.guild.name),
-            // console.log('guild_id = ' + message.guild.id),
-            // console.log('channel_name = ' + message.channel.name),
-            // console.log('channel_id = ' + message.channel.id),
-            // console.log('message_id = ' + message.id),
-            // console.log('author_id = ' + message.author.id),
-            // console.log('author_username = ' + message.author.username),
-            // console.log('member_nickname = ' + message.member.nickname),
-            // console.log('message_timestamp = ' + message.createdTimestamp),
-            // console.log('message_content = ' + message.mentions._content)
-
         } catch (e) {
             await client.query('ROLLBACK')
             throw e
         } finally {
-            // Make sure to release the client before any error handling,
-            // just in case the error handling itself throws an error.
             client.release()
         }
     })().catch(err => console.log(err.stack))
@@ -666,24 +634,16 @@ async function dmArchive(message) {
             const insertDmArchiveValues = [prepDmArchive.readable_timestamp, prepDmArchive.author_username, prepDmArchive.author_id, prepDmArchive.message_timestamp, prepDmArchive.message_content]
             await client.query(insertDmArchiveText, insertDmArchiveValues)
             await client.query('COMMIT')
-
-            // console.log('user_name = ' + message.author.username),
-            // console.log('user_id = ' + message.author.id),
-            // console.log('message_timestamp = ' + message.createdTimestamp),
-            // console.log('message_content = ' + message.content)
-
         } catch (e) {
             await client.query('ROLLBACK')
             throw e
         } finally {
-            // Make sure to release the client before any error handling,
-            // just in case the error handling itself throws an error.
             client.release()
         }
     })().catch(err => console.log(err.stack))
 }
 
-function updateStatus() {
+async function updateStatus() {
     var watchPlay = [0, 1]
     shuffle(watchPlay);
     if (watchPlay[0] == 0) {
