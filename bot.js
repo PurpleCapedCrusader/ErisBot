@@ -13,7 +13,20 @@ const PREFIX = config.prefix;
 const {Pool} = require('pg');
 const pool = new Pool(dbCreds);
 
-let godArray = ["apollo", "artemis", "athena", "atlas", "demeter", "hephaestus", "hermes", "minotaur", "pan", "prometheus", "aphrodite", "ares", "bia", "chaos", "charon", "chronus", "circe", "dionysus", "eros", "hera", "hestia", "hypnus", "limus", "medusa", "morpheus", "persephone", "poseidon", "selene", "triton", "zeus", "aeolus", "charybdis", "clio", "europaandtalus", "gaea", "graeae", "hades", "harpies", "hecate", "moerae", "nemesis", "siren", "tartarus", "terpsichore", "urania", "achilles", "adonis", "atalanta", "bellerophon", "heracles", "jason", "medea", "odysseus", "polyphemus", "theseus", "asteria", "castorandpollux", "eris", "hippolyta", "iris", "maenads", "pegasus", "proteus", "scylla", "tyche", "hydra", "nyx"];
+let godArray = [
+    "apollo", "artemis", "athena", "atlas", "demeter",
+    "hephaestus", "hermes", "minotaur", "pan", "prometheus",
+    "aphrodite", "ares", "bia", "chaos", "charon", "chronus",
+    "circe", "dionysus", "eros", "hera", "hestia", "hypnus",
+    "limus", "medusa", "morpheus", "persephone", "poseidon",
+    "selene", "triton", "zeus", "aeolus", "charybdis", "clio",
+    "europaandtalus", "gaea", "graeae", "hades", "harpies",
+    "hecate", "moerae", "nemesis", "siren", "tartarus",
+    "terpsichore", "urania", "achilles", "adonis", "atalanta",
+    "bellerophon", "heracles", "jason", "medea", "odysseus",
+    "polyphemus", "theseus", "asteria", "castorandpollux",
+    "eris", "hippolyta", "iris", "maenads", "pegasus",
+    "proteus", "scylla", "tyche", "hydra", "nyx"];
 
 // Ready statement
 bot.on('ready', () => {
@@ -129,7 +142,7 @@ bot.on('message', (message) => {
     // console.log ("args = " + args);
     // console.log(`${message.author.username} ${message.author.discriminator} id = ${message.author.id} looked up ${args} #${godArray.indexOf(lowerCase(args[0]))} - ${GetTimeStamp()}`);
 
-    if (godArray.indexOf(lowerCase(args[0])) >= 0 || godArray.indexOf(lowerCase(args[0])) <= 66) {
+    if (godArray.indexOf(lowerCase(args[0])) >= 0 && godArray.indexOf(lowerCase(args[0])) <= 66) {
         args[0] = lowerCase(args[0]);
         //console.log ("args[0] = " + args[0]);
         switch (args[0]) {
