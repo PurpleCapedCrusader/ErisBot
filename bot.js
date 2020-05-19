@@ -716,7 +716,10 @@ async function updateStatus() {
             "Iliad",
             "Dixit: Odyssey",
             "Apples To Apples",
-            "Gorilla Marketing"
+            "Gorilla Marketing",
+            "Gods & Monsters",
+            "Rise Of The Argonauts",
+            "NyxQuest: Kindred Spirits"
         ];
         shuffle(statusArray);
         bot.user.setActivity(statusArray[0], {
@@ -757,7 +760,8 @@ async function updateStatus() {
             "Odissea",
             "Fury of Achilles",
             "My Big Fat Greek Wedding",
-            "Grease"
+            "Grease",
+            "Sinbad: Legend Of The Seven Seas"
         ];
         shuffle(statusArray);
         bot.user.setActivity(statusArray[0], {
