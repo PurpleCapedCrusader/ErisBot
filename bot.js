@@ -408,16 +408,18 @@ bot.on('message', (message) => {
                     `**3.** Check for updates to make sure you have the most recent version of the app.\n\u200b` +
                     `**4.** Make sure you know how to set your phone/device to Do Not Disturb.\n\u200b` +
                     `    - Calls or notifications may cause you to get kicked from the game.\n\u200b` +
-                    `**5.** Screen-recording is encouraged. Please share your videos with the community.\n\u200b\n\u200b` +
-                    
+                    `**5.** Screen-recording is encouraged. Please share your videos with the community.\n\u200b`
+                ).catch(console.error);
+                message.channel.send(
                     `**Pre-Tournament:**\n\u200b` +
                     `**1.** **Set your phone/device to Do Not Disturb.**\n\u200b` +
                     `**2.** Join the #tourney-chat channel on Discord.\n\u200b` +
                     `**3.** Login to Challonge.com\n\u200b` +
                     `    - Check-in if the tournament requires it.\n\u200b` +
                     `    - **Please check in at least 15 min before the scheduled start time.**\n\u200b` +
-                    `    - **The tournament will start on time**.\n\u200b\n\u200b` +
-
+                    `    - **The tournament will start on time**.\n\u200b`
+                ).catch(console.error);
+                message.channel.send(
                     `**Tournament:**\n\u200b` +
                     `**1.** When the tournament starts\n\u200b` +
                     `    - **Registrants that have not checked in (if chech-in is required) will be disqualified**.\n\u200b` +
@@ -430,17 +432,20 @@ bot.on('message', (message) => {
                     `    - Player order is randomized.\n\u200b` +
                     `    - Player 1 chooses 2 **DIFFERENT** gods/heroes. **NO MIRROR MATCHES**.\n\u200b` +
                     `    - Player 2 picks the one they want to use.\n\u200b` +
-                    `**6.** Once the match starts, **DO NOT leave the app until the game ends** and you see the Victory/Defeat screen.\n\u200b` +
-                    `**7.** If you experience disconnection/opponent leaving/freeze/bug:\n\u200b` +
+                    `**6.** Once the match starts, **DO NOT leave the app until the game ends** and you see the Victory/Defeat screen.\n\u200b`
+                ).catch(console.error);
+                message.channel.send(
+                    `**Issues:**\n\u200b` +
+                    `**1.** If you experience disconnection/opponent leaving/freeze/bug:\n\u200b` +
                     `    - Notify the tournament coordinator of the issue.\n\u200b` +
                     `    - You will be allowed to restart the match 1 time.\n\u200b` +
                     `    - If the rematch ends without a winner the match may be counted as a tie.\n\u200b` +
                     `    - Players experiencing tech issues in more than 1 round may be asked to bow out of the tournament.\n\u200b` +
                     `    - Please provide some basic info about the match including your opponent’s name, who was likely to win (if the match was close to ending), and the outcome of your previous matches with that opponent.\n\u200b` +
-                    `**8.** At the discretion of the tournament coordinator, players believed to be leaving games early to avoid a loss will be disqualified from the tournament.\n\u200b` +
-                    `**9.** After the match, go to Challonge.com and report the results.\n\u200b \n\u200b` +
+                    `**2.** At the discretion of the tournament coordinator, players believed to be leaving games early to avoid a loss will be disqualified from the tournament.\n\u200b` +
+                    `**3.** After the match, go to Challonge.com and report the results.\n\u200b \n\u200b` +
                     `Remember **we're all here to have fun!** Please give each other the benefit of any doubt and **be positive and encouraging**.`
-                    ).catch(console.error);
+                ).catch(console.error);
                 break;
 
             case 'update-info': // todo: make this response a DM back to the author
