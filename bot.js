@@ -61,7 +61,7 @@ bot.on('guildMemberAdd', member => {
         `Thank you for joining our Santorini server!!\n\u200b` +
         `Use the commands below to interact with me.\n\u200b`)
         .addField(`LIST OF COMMANDS`,
-        `**!help** - list of commands\n\u200b`)
+        `**!help** - There's no need to remember all of these commands. Use !help to bring up this list.\n\u200b`)
         .addField(`GOD INFORMATION`,
         `**!apollo** - information about Apollo... this works for all Gods and Heroes\n\u200b`)
         .addField(`FIND ONLINE OPPONENTS`,
@@ -214,7 +214,7 @@ bot.on('message', (message) => {
                 var embed = new Discord.MessageEmbed()
                         .setColor("0xd9ff00")
                         .addField(`LIST OF COMMANDS`,
-                        `**!help** - list of commands\n\u200b`)
+                        `**!help** - There's no need to remember all of these commands. Use !help to bring up this list.\n\u200b`)
                         .addField(`GOD INFORMATION`,
                         `**!apollo** - information about Apollo... this works for all Gods and Heroes\n\u200b`)
                         .addField(`FIND ONLINE OPPONENTS`,
@@ -298,8 +298,8 @@ bot.on('message', (message) => {
 
             case 'notinapp':
                 var embed = new Discord.MessageEmbed()
-                .setTitle(`**Gods not currently in the app**`)
-                .addField(`Chaos\n\u200b` +
+                .addField(`**Gods not currently in the app**`,
+                    `Chaos\n\u200b` +
                     `Circe\n\u200b` +
                     `Hecate\n\u200b` +
                     `Hydra\n\u200b` +
