@@ -35,12 +35,6 @@ bot.on('ready', () => {
     databaseCheck.createDatabaseTablesIfNotExist;
 });
 
-// New member message
-// bot.on('guildMemberAdd', (member) => {
-//     console.log(`New User "${member.user.username}" has joined "${member.guild.name}"` );
-//     //member.guild.channels.find(c => c.name === "new_members").send(`Hi ${member.user.username}, thanks for joining us.`);
-// });
-
 // error catch-all
 bot.on("error", (e) => console.error(`${GetTimeStamp()} :: ${e}`));
 bot.on("warn", (e) => console.warn(`${GetTimeStamp()} :: ${e}`));
@@ -57,6 +51,44 @@ setInterval(function () {
 setInterval(function () {
     updateStatus()
 }, 900000);// 60000 = 1min
+
+bot.on('guildMemberAdd', member => {
+    const embed = new Discord.MessageEmbed()
+        .setColor("0xd9ff00")
+        .setTitle('Welcome')
+        .addField(`GLAD YOU'RE HERE!!`,
+        `I'm ErisBot, the God of discord... srsly, I am.\n\u200b` +
+        `Thank you for joining our Santorini server!!\n\u200b` +
+        `Use the commands below to interact with me.`)
+        .addField(`GOD INFORMATION`,
+        `**!apollo** - information about Apollo... this works for all Gods and Heroes`)
+        .addField(`FIND ONLINE OPPONENTS`,
+        `**!online 20** - Enables NotifyOn for you and sends a DM to everyone with NotifyOn enabled, explaining that you're available to play for the number of minutes you specify (up to 60).\n\u200b` +
+        `**!NotifyOn** - Use this to get notified when someone uses the !Online command.\n\u200b` +
+        `**!NotifyOff** - Use this to stop getting notified when someone uses the !Online command.`)
+        .addField(`SET YOUR GOD ROLE IN THE MEMBER LIST`,
+        `**!iamGodName** - !iamApollo, for example, will add or remove the Apollo role. You will appear in the Member List in your first role alphabetically. This command only works while in the #eris-bot channel.\n\u200b` +
+        `**!**❤️ - Give some love to ErisBot`)
+        .addField(`GOD LISTS`,
+        `**!update-list** list of powers updated for the app\n\u200b` +
+        `**!order** - Power Order Aid for 2-Player Games\n\u200b` +
+        `**!NotInApp** - list of Gods that aren't currently supported in the app`)
+        .addField(`GAME RULES & DEFINITIONS`,
+        `**!rules** - game rules\n\u200b` +
+        `**!force** - definition of force from rulebook\n\u200b` +
+        `**!move** - definition of move from rulebook\n\u200b` +
+        `**!build** - definition of build from rulebook\n\u200b` +
+        `**!win** - definition of win from rulebook\n\u200b` +
+        `**!dome** - definition of dome from rulebook\n\u200b` +
+        `**!tournament** - basic guidelines for our tournaments\n\u200b` +
+        `**!board** - image of the board with space notation`)
+        .addField(`INVITE YOUR FRIENDS`,
+        `**!invite** - discord server invite link\n\u200b` +
+        `**!app** - links to the Santorini app on the Apple App store and the Google Play store`)
+        .addField(`GAME LOGS`,
+        `**!log** - location of log files on Android devices`);
+    member.send(embed).catch(console.error);
+});
 
 // Main Args/Response 
 bot.on('message', (message) => {
@@ -177,29 +209,36 @@ bot.on('message', (message) => {
 
             case 'erisbot':
             case 'help':
-                message.channel.send('Send a message where the first word starts with "!" and then, with no space, the name of a character in the game or one of her pre-programmed trigger words.\n\u200b' +
-                    ' \n\u200b' +
-                    `I'll respond to:\n\u200b` +
-                    '**!update-list** list of powers updated for the app\n\u200b' +
-                    '**!rules** - game rules\n\u200b' +
-                    '**!force** - definition of force from rulebook\n\u200b' +
-                    '**!move** - definition of move from rulebook\n\u200b' +
-                    '**!build** - definition of build from rulebook\n\u200b' +
-                    '**!win** - definition of win from rulebook\n\u200b' +
-                    '**!dome** - definition of dome from rulebook\n\u200b' +
-                    '**!log** - location of log files on Android devices\n\u200b' +
-                    '**!board** - image of the board with space notation\n\u200b' +
-                    '**!invite** - discord invite link\n\u200b' +
-                    '**!order** - Power Order Aid for 2-Player Games\n\u200b' +
-                    '**!apollo** - information about Apollo... this works for all Gods and Heroes\n\u200b' +
-                    `**!NotInApp** - list of Gods that aren't currently supported in the app\n\u200b` +
-                    '**!iamGodName** - !iamApollo, for example, will add or remove the Apollo role. You will appear in the Member List in your first role alphabetically. This command only works while in the #eris-bot channel.\n\u200b' +
-                    `**!NotifyOn** - Use this to get notified when someone uses the !Online command.\n\u200b` +
-                    `**!NotifyOff** - Use this to stop getting notified when someone uses the !Online command.\n\u200b` +
-                    `**!online 20** - Enables NotifyOn for you and sends a DM to everyone with NotifyOn enabled, explaining that you're available to play for the number of minutes you specify (up to 60).\n\u200b` +
-                    ' \n\u200b' +
-                    'If you don\'t want to message me in a public channel, you can DM me and I\'ll respond to you privately.'
-                    ).catch(console.error);
+                var embed = new Discord.MessageEmbed()
+                        .setColor("0xd9ff00")
+                        .addField(`GOD INFORMATION`,
+                        `**!apollo** - information about Apollo... this works for all Gods and Heroes`)
+                        .addField(`FIND ONLINE OPPONENTS`,
+                        `**!online 20** - Enables NotifyOn for you and sends a DM to everyone with NotifyOn enabled, explaining that you're available to play for the number of minutes you specify (up to 60).\n\u200b` +
+                        `**!NotifyOn** - Use this to get notified when someone uses the !Online command.\n\u200b` +
+                        `**!NotifyOff** - Use this to stop getting notified when someone uses the !Online command.`)
+                        .addField(`SET YOUR GOD ROLE IN THE MEMBER LIST`,
+                        `**!iamGodName** - !iamApollo, for example, will add or remove the Apollo role. You will appear in the Member List in your first role alphabetically. This command only works while in the #eris-bot channel.\n\u200b` +
+                        `**!**❤️ - Give some love to ErisBot`)
+                        .addField(`GOD LISTS`,
+                        `**!update-list** list of powers updated for the app\n\u200b` +
+                        `**!order** - Power Order Aid for 2-Player Games\n\u200b` +
+                        `**!NotInApp** - list of Gods that aren't currently supported in the app`)
+                        .addField(`GAME RULES & DEFINITIONS`,
+                        `**!rules** - game rules\n\u200b` +
+                        `**!force** - definition of force from rulebook\n\u200b` +
+                        `**!move** - definition of move from rulebook\n\u200b` +
+                        `**!build** - definition of build from rulebook\n\u200b` +
+                        `**!win** - definition of win from rulebook\n\u200b` +
+                        `**!dome** - definition of dome from rulebook\n\u200b` +
+                        `**!tournament** - basic guidelines for our tournaments\n\u200b` +
+                        `**!board** - image of the board with space notation`)
+                        .addField(`INVITE YOUR FRIENDS`,
+                        `**!invite** - discord server invite link\n\u200b` +
+                        `**!app** - links to the Santorini app on the Apple App store and the Google Play store`)
+                        .addField(`GAME LOGS`,
+                        `**!log** - location of log files on Android devices`);
+                    message.channel.send(embed).catch(console.error);
                 break;
 
             case 'force':
