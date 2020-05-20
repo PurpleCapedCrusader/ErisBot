@@ -59,20 +59,20 @@ bot.on('guildMemberAdd', member => {
         .addField(`GLAD YOU'RE HERE!!`,
         `I'm ErisBot, the God of discord... srsly, I am.\n\u200b` +
         `Thank you for joining our Santorini server!!\n\u200b` +
-        `Use the commands below to interact with me.`)
+        `Use the commands below to interact with me.\n\u200b`)
         .addField(`GOD INFORMATION`,
-        `**!apollo** - information about Apollo... this works for all Gods and Heroes`)
+        `**!apollo** - information about Apollo... this works for all Gods and Heroes\n\u200b`)
         .addField(`FIND ONLINE OPPONENTS`,
         `**!online 20** - Enables NotifyOn for you and sends a DM to everyone with NotifyOn enabled, explaining that you're available to play for the number of minutes you specify (up to 60).\n\u200b` +
         `**!NotifyOn** - Use this to get notified when someone uses the !Online command.\n\u200b` +
-        `**!NotifyOff** - Use this to stop getting notified when someone uses the !Online command.`)
+        `**!NotifyOff** - Use this to stop getting notified when someone uses the !Online command.\n\u200b`)
         .addField(`SET YOUR GOD ROLE IN THE MEMBER LIST`,
         `**!iamGodName** - !iamApollo, for example, will add or remove the Apollo role. You will appear in the Member List in your first role alphabetically. This command only works while in the #eris-bot channel.\n\u200b` +
-        `**!**❤️ - Give some love to ErisBot`)
+        `**!**❤️ - Give some love to ErisBot\n\u200b`)
         .addField(`GOD LISTS`,
         `**!update-list** list of powers updated for the app\n\u200b` +
         `**!order** - Power Order Aid for 2-Player Games\n\u200b` +
-        `**!NotInApp** - list of Gods that aren't currently supported in the app`)
+        `**!NotInApp** - list of Gods that aren't currently supported in the app\n\u200b`)
         .addField(`GAME RULES & DEFINITIONS`,
         `**!rules** - game rules\n\u200b` +
         `**!force** - definition of force from rulebook\n\u200b` +
@@ -81,12 +81,12 @@ bot.on('guildMemberAdd', member => {
         `**!win** - definition of win from rulebook\n\u200b` +
         `**!dome** - definition of dome from rulebook\n\u200b` +
         `**!tournament** - basic guidelines for our tournaments\n\u200b` +
-        `**!board** - image of the board with space notation`)
+        `**!board** - image of the board with space notation\n\u200b`)
         .addField(`INVITE YOUR FRIENDS`,
         `**!invite** - discord server invite link\n\u200b` +
-        `**!app** - links to the Santorini app on the Apple App store and the Google Play store`)
+        `**!app** - links to the Santorini app on the Apple App store and the Google Play store\n\u200b`)
         .addField(`GAME LOGS`,
-        `**!log** - location of log files on Android devices`);
+        `**!log** - location of log files on Android devices\n\u200b`);
     member.send(embed).catch(console.error);
 });
 
@@ -212,18 +212,18 @@ bot.on('message', (message) => {
                 var embed = new Discord.MessageEmbed()
                         .setColor("0xd9ff00")
                         .addField(`GOD INFORMATION`,
-                        `**!apollo** - information about Apollo... this works for all Gods and Heroes`)
+                        `**!apollo** - information about Apollo... this works for all Gods and Heroes\n\u200b`)
                         .addField(`FIND ONLINE OPPONENTS`,
                         `**!online 20** - Enables NotifyOn for you and sends a DM to everyone with NotifyOn enabled, explaining that you're available to play for the number of minutes you specify (up to 60).\n\u200b` +
                         `**!NotifyOn** - Use this to get notified when someone uses the !Online command.\n\u200b` +
-                        `**!NotifyOff** - Use this to stop getting notified when someone uses the !Online command.`)
+                        `**!NotifyOff** - Use this to stop getting notified when someone uses the !Online command.\n\u200b`)
                         .addField(`SET YOUR GOD ROLE IN THE MEMBER LIST`,
                         `**!iamGodName** - !iamApollo, for example, will add or remove the Apollo role. You will appear in the Member List in your first role alphabetically. This command only works while in the #eris-bot channel.\n\u200b` +
-                        `**!**❤️ - Give some love to ErisBot`)
+                        `**!**❤️ - Give some love to ErisBot\n\u200b`)
                         .addField(`GOD LISTS`,
                         `**!update-list** list of powers updated for the app\n\u200b` +
                         `**!order** - Power Order Aid for 2-Player Games\n\u200b` +
-                        `**!NotInApp** - list of Gods that aren't currently supported in the app`)
+                        `**!NotInApp** - list of Gods that aren't currently supported in the app\n\u200b`)
                         .addField(`GAME RULES & DEFINITIONS`,
                         `**!rules** - game rules\n\u200b` +
                         `**!force** - definition of force from rulebook\n\u200b` +
@@ -232,12 +232,12 @@ bot.on('message', (message) => {
                         `**!win** - definition of win from rulebook\n\u200b` +
                         `**!dome** - definition of dome from rulebook\n\u200b` +
                         `**!tournament** - basic guidelines for our tournaments\n\u200b` +
-                        `**!board** - image of the board with space notation`)
+                        `**!board** - image of the board with space notation\n\u200b`)
                         .addField(`INVITE YOUR FRIENDS`,
                         `**!invite** - discord server invite link\n\u200b` +
-                        `**!app** - links to the Santorini app on the Apple App store and the Google Play store`)
+                        `**!app** - links to the Santorini app on the Apple App store and the Google Play store\n\u200b`)
                         .addField(`GAME LOGS`,
-                        `**!log** - location of log files on Android devices`);
+                        `**!log** - location of log files on Android devices\n\u200b`);
                     message.channel.send(embed).catch(console.error);
                 break;
 
