@@ -400,25 +400,25 @@ bot.on('message', (message) => {
 
             case 'tourney':
             case 'tournament':
-                var embed = new Discord.MessageEmbed()
-                    .setTitle(`**Santorini Tournament Guide**`)
-                    .addField(`**Tournament Prep:**`,
+                message.channel.send(
+                    `**Santorini Tournament Guide**\n\u200b\n\u200b` +
+                    `**Tournament Prep:**\n\u200b` +
                     `**1.** Register: https://challonge.com/communities/santorini \n\u200b` +
                     `**2.** Update either your Discord nickname or Challonge name so they match.\n\u200b` +
                     `**3.** Check for updates to make sure you have the most recent version of the app.\n\u200b` +
                     `**4.** Make sure you know how to set your phone/device to Do Not Disturb.\n\u200b` +
                     `    - Calls or notifications may cause you to get kicked from the game.\n\u200b` +
-                    `**5.** Screen-recording is encouraged. Please share your videos with the community.\n\u200b`)
+                    `**5.** Screen-recording is encouraged. Please share your videos with the community.\n\u200b\n\u200b` +
                     
-                    .addField(`**Pre-Tournament:**`,
+                    `**Pre-Tournament:**\n\u200b` +
                     `**1.** **Set your phone/device to Do Not Disturb.**\n\u200b` +
                     `**2.** Join the #tourney-chat channel on Discord.\n\u200b` +
                     `**3.** Login to Challonge.com\n\u200b` +
                     `    - Check-in if the tournament requires it.\n\u200b` +
                     `    - **Please check in at least 15 min before the scheduled start time.**\n\u200b` +
-                    `    - **The tournament will start on time**.\n\u200b`)
+                    `    - **The tournament will start on time**.\n\u200b`
 
-                    .addField(`**Tournament:**`,
+                    `**Tournament:**\n\u200b` +
                     `**1.** When the tournament starts\n\u200b` +
                     `    - **Registrants that have not checked in (if chech-in is required) will be disqualified**.\n\u200b` +
                     `    - An updated bracket will be created with the remaining players.\n\u200b` +
@@ -439,8 +439,8 @@ bot.on('message', (message) => {
                     `    - Please provide some basic info about the match including your opponent’s name, who was likely to win (if the match was close to ending), and the outcome of your previous matches with that opponent.\n\u200b` +
                     `**8.** At the discretion of the tournament coordinator, players believed to be leaving games early to avoid a loss will be disqualified from the tournament.\n\u200b` +
                     `**9.** After the match, go to Challonge.com and report the results.\n\u200b \n\u200b` +
-                    `Remember **we're all here to have fun!** Please give each other the benefit of any doubt and **be positive and encouraging**.\n\u200b`);
-                message.channel.send(embed).catch(console.error);
+                    `Remember **we're all here to have fun!** Please give each other the benefit of any doubt and **be positive and encouraging**.\n\u200b`
+                    ).catch(console.error);
                 break;
 
             case 'update-info': // todo: make this response a DM back to the author
