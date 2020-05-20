@@ -416,7 +416,7 @@ bot.on('message', (message) => {
                     `**3.** Login to Challonge.com\n\u200b` +
                     `    - Check-in if the tournament requires it.\n\u200b` +
                     `    - **Please check in at least 15 min before the scheduled start time.**\n\u200b` +
-                    `    - **The tournament will start on time**.\n\u200b`
+                    `    - **The tournament will start on time**.\n\u200b\n\u200b` +
 
                     `**Tournament:**\n\u200b` +
                     `**1.** When the tournament starts\n\u200b` +
@@ -439,7 +439,7 @@ bot.on('message', (message) => {
                     `    - Please provide some basic info about the match including your opponent’s name, who was likely to win (if the match was close to ending), and the outcome of your previous matches with that opponent.\n\u200b` +
                     `**8.** At the discretion of the tournament coordinator, players believed to be leaving games early to avoid a loss will be disqualified from the tournament.\n\u200b` +
                     `**9.** After the match, go to Challonge.com and report the results.\n\u200b \n\u200b` +
-                    `Remember **we're all here to have fun!** Please give each other the benefit of any doubt and **be positive and encouraging**.\n\u200b`
+                    `Remember **we're all here to have fun!** Please give each other the benefit of any doubt and **be positive and encouraging**.`
                     ).catch(console.error);
                 break;
 
