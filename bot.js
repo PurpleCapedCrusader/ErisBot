@@ -306,7 +306,7 @@ bot.on('message', (message) => {
                     `Moerae\n\u200b` +
                     `Nyx\n\u200b` +
                     `Tartarus\n\u200b` +
-                    `Tyche\n\u200b`)
+                    `Tyche`)
                     message.channel.send(embed).catch(console.error);
                 break;
 
@@ -458,7 +458,7 @@ bot.on('message', (message) => {
                             .addField('App Availability:', bot.godData[i].inAppPurchase + "\n\u200b")
                             .addField('Compatible with', bot.godData[i].compatability)
                             .setThumbnail('attachment://' + (bot.godData[i].imageName) + '.jpg');
-                        message.channel.send(embed).catch(console.error);
+                        message.member.send(embed).catch(console.error);
                     }
                 }
                 break;
@@ -479,7 +479,7 @@ bot.on('message', (message) => {
                         '10. Nemesis \n\u200b' +
                         '11. Proteus \n\u200b' +
                         '12. Siren \n\u200b \n\u200b' +
-                        'To see all of the information for each of these characters, send me a direct message that says "!update-info"')
+                        `Use **!update-info** and I'll send you a DM with all of the information for each of these characters`)
                 message.channel.send(embed).catch(console.error);
                 break;
 
