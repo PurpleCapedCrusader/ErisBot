@@ -60,6 +60,8 @@ bot.on('guildMemberAdd', member => {
         `I'm ErisBot, the God of discord... srsly, I am.\n\u200b` +
         `Thank you for joining our Santorini server!!\n\u200b` +
         `Use the commands below to interact with me.\n\u200b`)
+        .addField(`LIST OF COMMANDS`,
+        `**!help** - list of commands\n\u200b`)
         .addField(`GOD INFORMATION`,
         `**!apollo** - information about Apollo... this works for all Gods and Heroes\n\u200b`)
         .addField(`FIND ONLINE OPPONENTS`,
@@ -211,6 +213,8 @@ bot.on('message', (message) => {
             case 'help':
                 var embed = new Discord.MessageEmbed()
                         .setColor("0xd9ff00")
+                        .addField(`LIST OF COMMANDS`,
+                        `**!help** - list of commands\n\u200b`)
                         .addField(`GOD INFORMATION`,
                         `**!apollo** - information about Apollo... this works for all Gods and Heroes\n\u200b`)
                         .addField(`FIND ONLINE OPPONENTS`,
@@ -248,13 +252,16 @@ bot.on('message', (message) => {
                 break;
 
             case '❤️':
-                if (message.channel.name === 'eris-bot') {
+                if (message.channel.type === 'dm') {
+                    message.channel.send(`This command doesn't work as a DM.`).catch(console.error);
+                }
+                if (message.channel.type === 'text') {
                     const args = message.content.slice(PREFIX.length).toLowerCase().trim().split(/ +/g);
-                    var roleRequested = "eris loves";
+                    var roleRequested = "Eris Loves";
                     var durationRequested = 60;
                     setTempOnlineRole(durationRequested, message, roleRequested)
+                    message.channel.send('Awww, a ❤️. How sweet!!').catch(console.error);
                 }
-                message.channel.send('Awww, a ❤️. How sweet!!').catch(console.error);
                 break;
 
             case 'invite':
@@ -290,18 +297,17 @@ bot.on('message', (message) => {
                 break;
 
             case 'notinapp':
-                message.channel.send(
-                    'These Gods are not in the app.\n\u200b' +
-                    ' \n\u200b' +
-                    'Chaos\n\u200b' +
-                    'Circe\n\u200b' +
-                    'Hecate\n\u200b' +
-                    'Hydra\n\u200b' +
-                    'Moerae\n\u200b' +
-                    'Nyx\n\u200b' +
-                    'Tartarus\n\u200b' +
-                    'Tyche\n\u200b'
-                ).catch(console.error);
+                var embed = new Discord.MessageEmbed()
+                .setTitle(`**Gods not currently in the app**`)
+                .addField(`Chaos\n\u200b` +
+                    `Circe\n\u200b` +
+                    `Hecate\n\u200b` +
+                    `Hydra\n\u200b` +
+                    `Moerae\n\u200b` +
+                    `Nyx\n\u200b` +
+                    `Tartarus\n\u200b` +
+                    `Tyche\n\u200b`)
+                    message.channel.send(embed).catch(console.error);
                 break;
 
             case 'order':
@@ -394,44 +400,47 @@ bot.on('message', (message) => {
 
             case 'tourney':
             case 'tournament':
-                message.channel.send("**Santorini Tournaments Guide**\n\u200b \n\u200b" +
-                            "**Tournament Prep:**\n\u200b" +
-                            "**1.** Register: https://challonge.com/communities/santorini\n\u200b" +
-                            "**2.** Update either your Discord nickname or Challonge name so they match.\n\u200b" +
-                            "**3.** Check for updates to make sure you have the most recent version of the app.\n\u200b" +
-                            "**4.** Make sure you know how to set your phone/device to Do Not Disturb.\n\u200b" +
-                            "     - Calls or notifications may cause you to get kicked from the game.\n\u200b" +
-                            "**5.** Screen-recording is encouraged. Please share your videos with the community.\n\u200b")
-                            
-                message.channel.send("**Pre-Tournament:**\n\u200b" +
-                            "**1.** Remember that we're here to have fun playing a game we all love!\n\u200b" +
-                            "**2.** **Set your phone/device to Do Not Disturb.**\n\u200b" +
-                            "**3.** Join the #general channel on Discord.\n\u200b" +
-                            "**4.** Login to Challonge.com\n\u200b" +
-                            "     - Check-in opens 30 min before start time.\n\u200b" +
-                            "     - **Please check in at least 15 min before the scheduled start time.**\n\u200b" +
-                            "     - **The tournament will start on time**.\n\u200b")
+                var embed = new Discord.MessageEmbed()
+                    .setTitle(`**Santorini Tournament Guide**`)
+                    .addField(`**Tournament Prep:**`,
+                    `**1.** Register: https://challonge.com/communities/santorini \n\u200b` +
+                    `**2.** Update either your Discord nickname or Challonge name so they match.\n\u200b` +
+                    `**3.** Check for updates to make sure you have the most recent version of the app.\n\u200b` +
+                    `**4.** Make sure you know how to set your phone/device to Do Not Disturb.\n\u200b` +
+                    `    - Calls or notifications may cause you to get kicked from the game.\n\u200b` +
+                    `**5.** Screen-recording is encouraged. Please share your videos with the community.\n\u200b`)
+                    
+                    .addField(`**Pre-Tournament:**`,
+                    `**1.** **Set your phone/device to Do Not Disturb.**\n\u200b` +
+                    `**2.** Join the #tourney-chat channel on Discord.\n\u200b` +
+                    `**3.** Login to Challonge.com\n\u200b` +
+                    `    - Check-in if the tournament requires it.\n\u200b` +
+                    `    - **Please check in at least 15 min before the scheduled start time.**\n\u200b` +
+                    `    - **The tournament will start on time**.\n\u200b`)
 
-                message.channel.send("**Tournament:**\n\u200b" +
-                            "**1.** When the tournament starts\n\u200b" +
-                            "     - **Registrants that have not checked in will be disqualified**.\n\u200b" +
-                            "     - An updated bracket will be created with the remaining players.\n\u200b" +
-                            "     - Games played before the official start of the tournament will not be counted.\n\u200b" +
-                            "**2.** Each match will show two players, one above the other. The player on top is the Host and is responsible for sending their opponent the Private Match Code.\n\u200b" +
-                            "**3.** Host player: start a Private Match and **send the Private Match Code to your opponent via Discord DM**.\n\u200b" +
-                            "**4.** Both players join the match.\n\u200b" +
-                            "**5.** The app will guide you through game setup:\n\u200b" +
-                            "     - Player order is randomized.\n\u200b" +
-                            "     - Player 1 chooses 2 **DIFFERENT** gods/heroes. **NO MIRROR MATCHES**.\n\u200b" +
-                            "     - Player 2 picks the one they want to use.\n\u200b" +
-                            "**6.** Once the match starts, **DO NOT leave the app until the game ends** and you see the Victory/Defeat screen.\n\u200b" +
-                            "**7.** If you experience disconnection/opponent leaving/freeze/bug:\n\u200b" +
-                            "     - Notify the tournament coordinator of the issue.\n\u200b" +
-                            "     - You will be allowed to restart the match 1 time.\n\u200b" +
-                            "     - If the rematch ends without a winner then the match will be counted as a tie.\n\u200b" +
-                            "     - Players experiencing tech issues in more than 1 round may be asked to bow out of the tournament.\n\u200b" +
-                            "**8.** After the match, go to Challonge.com and report the results.\n\u200b \n\u200b" +
-                            "Remember that **we're all here to have fun!** Please give each other the benefit of any doubt and **be positive and encouraging**.");
+                    .addField(`**Tournament:**`,
+                    `**1.** When the tournament starts\n\u200b` +
+                    `    - **Registrants that have not checked in (if chech-in is required) will be disqualified**.\n\u200b` +
+                    `    - An updated bracket will be created with the remaining players.\n\u200b` +
+                    `    - Games played before the official start of the tournament will not be counted.\n\u200b` +
+                    `**2.** Each match will show two players, one above the other. The player on top is the Host and is responsible for sending their opponent the Private Match Code.\n\u200b` +
+                    `**3.** Host player: start a Private Match and **send the Private Match Code to your opponent via Discord DM**.\n\u200b` +
+                    `**4.** Both players join the match.\n\u200b` +
+                    `**5.** The app will guide you through game setup:\n\u200b` +
+                    `    - Player order is randomized.\n\u200b` +
+                    `    - Player 1 chooses 2 **DIFFERENT** gods/heroes. **NO MIRROR MATCHES**.\n\u200b` +
+                    `    - Player 2 picks the one they want to use.\n\u200b` +
+                    `**6.** Once the match starts, **DO NOT leave the app until the game ends** and you see the Victory/Defeat screen.\n\u200b` +
+                    `**7.** If you experience disconnection/opponent leaving/freeze/bug:\n\u200b` +
+                    `    - Notify the tournament coordinator of the issue.\n\u200b` +
+                    `    - You will be allowed to restart the match 1 time.\n\u200b` +
+                    `    - If the rematch ends without a winner the match may be counted as a tie.\n\u200b` +
+                    `    - Players experiencing tech issues in more than 1 round may be asked to bow out of the tournament.\n\u200b` +
+                    `    - Please provide some basic info about the match including your opponent’s name, who was likely to win (if the match was close to ending), and the outcome of your previous matches with that opponent.\n\u200b` +
+                    `**8.** At the discretion of the tournament coordinator, players believed to be leaving games early to avoid a loss will be disqualified from the tournament.\n\u200b` +
+                    `**9.** After the match, go to Challonge.com and report the results.\n\u200b \n\u200b` +
+                    `Remember **we're all here to have fun!** Please give each other the benefit of any doubt and **be positive and encouraging**.\n\u200b`);
+                message.channel.send(embed).catch(console.error);
                 break;
 
             case 'update-info': // todo: make this response a DM back to the author
@@ -608,9 +617,9 @@ async function setTempOnlineRole(durationRequested, message, roleRequested) {
                     }
                     if (member.id != message.author.id) {
                         if (message.member.nickname != null) {
-                            member.send(`${message.member.nickname} is playing Santorini online for the next ${onlineRequest.duration_requested} min. If you want me to stop sending you these updates, use the !notifyOFF command.`)
+                            member.send(`${message.member.nickname} is playing Santorini online for the next ${onlineRequest.duration_requested} min. If you want me to stop sending you these updates, use the !notifyOFF command in the #eris-bot channel.`)
                         } else {
-                            member.send(`${onlineRequest.author_username} is playing Santorini online for the next ${onlineRequest.duration_requested} min. If you want me to stop sending you these updates, use the !notifyOFF command.`)
+                            member.send(`${onlineRequest.author_username} is playing Santorini online for the next ${onlineRequest.duration_requested} min. If you want me to stop sending you these updates, use the !notifyOFF command in the #eris-bot channel.`)
                         }
                     }
                 });
