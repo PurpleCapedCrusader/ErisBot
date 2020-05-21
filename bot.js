@@ -463,7 +463,7 @@ bot.on('message', (message) => {
                             .addField('App Availability:', bot.godData[i].inAppPurchase + "\n\u200b")
                             .addField('Compatible with', bot.godData[i].compatability)
                             .setThumbnail('attachment://' + (bot.godData[i].imageName) + '.jpg');
-                        message.member.send(embed).catch(console.error);
+                        message.author.send(embed).catch(console.error);
                     }
                 }
                 break;
