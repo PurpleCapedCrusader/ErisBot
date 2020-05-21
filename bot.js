@@ -72,7 +72,8 @@ bot.on('guildMemberAdd', member => {
         `**!iamGodName** - !iamApollo, for example, will add or remove the Apollo role. You will appear in the Member List in your first role alphabetically. This command only works while in the #eris-bot channel.\n\u200b` +
         `**!**❤️ - Give some love to ErisBot\n\u200b`)
         .addField(`GOD LISTS`,
-        `**!update-list** list of powers updated for the app\n\u200b` +
+        `**!update-list** - a list of the Gods/Heroes with abilities updated for the app\n\u200b` +
+        `**!update-info** - DMs with all of the info for each of the powers updated for the app\n\u200b` +
         `**!order** - Power Order Aid for 2-Player Games\n\u200b` +
         `**!NotInApp** - list of Gods that aren't currently supported in the app\n\u200b`)
         .addField(`GAME RULES & DEFINITIONS`,
@@ -225,7 +226,8 @@ bot.on('message', (message) => {
                         `**!iamGodName** - !iamApollo, for example, will add or remove the Apollo role. You will appear in the Member List in your first role alphabetically. This command only works while in the #eris-bot channel.\n\u200b` +
                         `**!**❤️ - Give some love to ErisBot\n\u200b`)
                         .addField(`GOD LISTS`,
-                        `**!update-list** list of powers updated for the app\n\u200b` +
+                        `**!update-list** - a list of the Gods/Heroes with abilities updated for the app\n\u200b` +
+                        `**!update-info** - DMs with all of the info for each of the powers updated for the app\n\u200b` +
                         `**!order** - Power Order Aid for 2-Player Games\n\u200b` +
                         `**!NotInApp** - list of Gods that aren't currently supported in the app\n\u200b`)
                         .addField(`GAME RULES & DEFINITIONS`,
