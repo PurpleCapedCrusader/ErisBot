@@ -88,7 +88,7 @@ let godArray = [
 // Ready statement
 bot.on("ready", () => {
   console.log(
-    `${GetTimeStamp()} :: ErisBot is ready to serve on ${
+    `${getTimeStamp()} :: ErisBot is ready to serve on ${
       bot.guilds.cache.size
     } servers, for ${bot.users.cache.size} users.`
   );
@@ -97,9 +97,9 @@ bot.on("ready", () => {
 });
 
 // error catch-all
-bot.on("error", (e) => console.error(`${GetTimeStamp()} :: ${e}`));
-bot.on("warn", (e) => console.warn(`${GetTimeStamp()} :: ${e}`));
-bot.on("debug", (e) => console.info(`${GetTimeStamp()} :: ${e}`));
+bot.on("error", (e) => console.error(`${getTimeStamp()} :: ${e}`));
+bot.on("warn", (e) => console.warn(`${getTimeStamp()} :: ${e}`));
+bot.on("debug", (e) => console.info(`${getTimeStamp()} :: ${e}`));
 
 // Link to God data
 bot.godData = require("./godData.json");
@@ -188,16 +188,21 @@ bot.on("message", (message) => {
     message.guild.id === config.guildId &&
     !message.author.bot
   ) {
-    let messageArray = message.content.toLowerCase().trim().split(/ +/g);
-    var intersection = _.intersection(
-      messageArray,
-      godReactions.godReactionsArray
-    );
-    for (let i = 0; i < intersection.length; i++) {
-      const reactionEmoji = message.guild.emojis.cache.find(
-        (emoji) => emoji.name === intersection[i]
+    try {
+      let messageArray = message.content.toLowerCase().trim().split(/ +/g);
+      var intersection = _.intersection(
+        messageArray,
+        godReactions.godReactionsArray
       );
-      message.react(reactionEmoji);
+      for (let i = 0; i < intersection.length; i++) {
+        const reactionEmoji = message.guild.emojis.cache.find(
+          (emoji) => emoji.name === intersection[i]
+        );
+        message.react(reactionEmoji);
+      }
+    } catch (err) {
+      dmError(err);
+    //   throw err;
     }
   }
 
@@ -854,7 +859,7 @@ bot.on("message", (message) => {
   }
 });
 
-function GetTimeStamp() {
+function getTimeStamp() {
   let now = new Date();
   return "[" + now.toLocaleString() + "]";
 }
@@ -882,6 +887,7 @@ async function removeTempOnlineRole() {
       });
     } catch (e) {
       await client.query("ROLLBACK");
+      dmError(err);
       throw e;
     } finally {
       client.release();
@@ -906,7 +912,7 @@ async function setTempOnlineRole(durationRequested, message, roleRequested) {
         author_username: message.author.username,
         author_id: message.author.id,
         member_nickname: message.member.nickname,
-        readable_timestamp: GetTimeStamp(),
+        readable_timestamp: getTimeStamp(),
         start_time: timeOfRequest,
         duration_requested: durationRequested,
         remove_time: timeOfRequest + durationRequested * 60000,
@@ -975,6 +981,7 @@ async function setTempOnlineRole(durationRequested, message, roleRequested) {
       }
     } catch (e) {
       await client.query("ROLLBACK");
+      dmError(err);
       throw e;
     } finally {
       client.release();
@@ -1004,7 +1011,7 @@ async function messageArchive(message) {
     const client = await pool.connect();
     try {
       const prepMessageArchive = {
-        readable_timestamp: GetTimeStamp(),
+        readable_timestamp: getTimeStamp(),
         guild_name: message.guild.name,
         guild_id: message.guild.id,
         channel_name: message.channel.name,
@@ -1036,6 +1043,7 @@ async function messageArchive(message) {
       await client.query("COMMIT");
     } catch (e) {
       await client.query("ROLLBACK");
+      dmError(err);
       throw e;
     } finally {
       client.release();
@@ -1048,7 +1056,7 @@ async function dmArchive(message) {
     const client = await pool.connect();
     try {
       const prepDmArchive = {
-        readable_timestamp: GetTimeStamp(),
+        readable_timestamp: getTimeStamp(),
         author_username: message.author.username,
         author_id: message.author.id,
         message_timestamp: message.createdTimestamp,
@@ -1068,11 +1076,17 @@ async function dmArchive(message) {
       await client.query("COMMIT");
     } catch (e) {
       await client.query("ROLLBACK");
+      dmError(err);
       throw e;
     } finally {
       client.release();
     }
   })().catch((err) => console.log(err.stack));
+}
+
+function dmError(err) {
+  let adminUser = bot.users.cache.get(`${config.adminID}`);
+  adminUser.send(`ERROR: ${getTimeStamp()} :: ${err.stack}`);
 }
 
 async function updateStatus() {
