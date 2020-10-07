@@ -97,9 +97,9 @@ bot.on("ready", () => {
 });
 
 // error catch-all
-bot.on("error", (e) => console.error(`${getTimeStamp()} :: ${e}`));
-bot.on("warn", (e) => console.warn(`${getTimeStamp()} :: ${e}`));
-bot.on("debug", (e) => console.info(`${getTimeStamp()} :: ${e}`));
+bot.on("error", (err) => console.error(`${getTimeStamp()} :: ${err}`));
+bot.on("warn", (err) => console.warn(`${getTimeStamp()} :: ${err}`));
+bot.on("debug", (err) => console.info(`${getTimeStamp()} :: ${err}`));
 
 // Link to God data
 bot.godData = require("./godData.json");
@@ -189,8 +189,6 @@ bot.on("message", (message) => {
     !message.author.bot
   ) {
     try {
-      console.log(message.content);
-      // var regex = /[!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~]/g;
       let messageArray = (message.content)
       .replace(/'s+/g, ` `)
       .replace(/[\.,-\/#!$%\^&\*;":{}=\-_`\'\\~()@\+\?><\[\]\+]/g, '')
@@ -199,7 +197,6 @@ bot.on("message", (message) => {
       .toLowerCase()
       .trim()
       .split(/ +/g);
-      console.log(messageArray);
       var intersection = _.intersection(
         messageArray,
         godReactions.godReactionsArray
@@ -212,7 +209,6 @@ bot.on("message", (message) => {
       }
     } catch (err) {
       dmError(err);
-    //   throw err;
     }
   }
 
@@ -895,10 +891,9 @@ async function removeTempOnlineRole() {
           `${row.author_username} was removed from the ${row.temp_role} role group in the ${row.guild_name} channel.`
         );
       });
-    } catch (e) {
+    } catch (err) {
       await client.query("ROLLBACK");
       dmError(err);
-      throw e;
     } finally {
       client.release();
     }
@@ -989,10 +984,9 @@ async function setTempOnlineRole(durationRequested, message, roleRequested) {
         );
         await message.member.roles.add(role).catch(console.error);
       }
-    } catch (e) {
+    } catch (err) {
       await client.query("ROLLBACK");
       dmError(err);
-      throw e;
     } finally {
       client.release();
     }
@@ -1051,10 +1045,9 @@ async function messageArchive(message) {
       ];
       await client.query(insertMessageArchiveText, insertMessageArchiveValues);
       await client.query("COMMIT");
-    } catch (e) {
+    } catch (err) {
       await client.query("ROLLBACK");
       dmError(err);
-      throw e;
     } finally {
       client.release();
     }
@@ -1084,10 +1077,9 @@ async function dmArchive(message) {
       ];
       await client.query(insertDmArchiveText, insertDmArchiveValues);
       await client.query("COMMIT");
-    } catch (e) {
+    } catch (err) {
       await client.query("ROLLBACK");
       dmError(err);
-      throw e;
     } finally {
       client.release();
     }
