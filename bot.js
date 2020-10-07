@@ -189,7 +189,17 @@ bot.on("message", (message) => {
     !message.author.bot
   ) {
     try {
-      let messageArray = message.content.toLowerCase().trim().split(/ +/g);
+      console.log(message.content);
+      // var regex = /[!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~]/g;
+      let messageArray = (message.content)
+      .replace(/'s+/g, ` `)
+      .replace(/[\.,-\/#!$%\^&\*;":{}=\-_`\'\\~()@\+\?><\[\]\+]/g, '')
+      .replace(/\s+/g, ' ')
+      .replace(/\n+/g, ' ')
+      .toLowerCase()
+      .trim()
+      .split(/ +/g);
+      console.log(messageArray);
       var intersection = _.intersection(
         messageArray,
         godReactions.godReactionsArray
