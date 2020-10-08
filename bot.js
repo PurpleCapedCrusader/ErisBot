@@ -819,41 +819,74 @@ bot.on("message", (message) => {
               break;
             } else if (bot.godData[godSearched].update == "Same") {
               const embed = new Discord.MessageEmbed()
-                .attachFiles([
-                  "../ErisBot/images/" +
-                    bot.godData[godSearched].imageName +
-                    ".jpg",
-                ])
-                .setColor("0x" + bot.godData[godSearched].borderColor)
-                .addField(
-                  bot.godData[godSearched].name,
-                  bot.godData[godSearched].title + "\n\u200b"
-                )
-                .addField(
-                  "Ability:",
-                  bot.godData[godSearched].originalAbilityFormatted + "\n\u200b"
-                )
-                .addField(
-                  "Banned Opponents:",
-                  bot.godData[godSearched].banned + "\n\u200b"
-                )
-                .addField(
-                  "Character Category:",
-                  bot.godData[godSearched].group + "\n\u200b"
-                )
-                .addField(
-                  "App Availability:",
-                  bot.godData[godSearched].inAppPurchase + "\n\u200b"
-                )
-                .addField(
-                  "Compatible with",
-                  bot.godData[godSearched].compatability
-                )
-                .setThumbnail(
-                  "attachment://" + bot.godData[godSearched].imageName + ".jpg"
-                );
-              message.channel.send(embed).catch(console.error);
-              break;
+              .attachFiles([
+                "../ErisBot/images/" +
+                  bot.godData[godSearched].imageName +
+                  ".jpg",
+              ])
+              .attachFiles([
+                "../ErisBot/images/" +
+                  bot.godData[godSearched].imageName +
+                  "_card.jpg",
+              ])
+              .setColor("0x" + bot.godData[godSearched].borderColor)
+              .addField(
+                bot.godData[godSearched].name,
+                bot.godData[godSearched].title + "\n\u200b"
+              )
+              .addField(
+                "Ability:",
+                bot.godData[godSearched].originalAbilityFormatted + "\n\u200b"
+              )
+              .addFields(
+                { name:"Character Category:", value: bot.godData[godSearched].group, inline: true },
+                { name:"", value: .setImage("attachment://" + bot.godData[godSearched].imageName + "_card.jpg"), inline: true },
+                { name: '\u200B', value: '\u200B' },
+                { name:"App Availability:", value: bot.godData[godSearched].inAppPurchase, inline: true },
+                { name:"Compatible with:", value:  bot.godData[godSearched].compatability, inline: true },
+              )
+              .setImage("attachment://" + bot.godData[godSearched].imageName + "_card.jpg")
+              .setThumbnail(
+                "attachment://" + bot.godData[godSearched].imageName + ".jpg"
+              );
+            message.channel.send(embed).catch(console.error);
+            break;
+              // const embed = new Discord.MessageEmbed()
+              //   .attachFiles([
+              //     "../ErisBot/images/" +
+              //       bot.godData[godSearched].imageName +
+              //       ".jpg",
+              //   ])
+              //   .setColor("0x" + bot.godData[godSearched].borderColor)
+              //   .addField(
+              //     bot.godData[godSearched].name,
+              //     bot.godData[godSearched].title + "\n\u200b"
+              //   )
+              //   .addField(
+              //     "Ability:",
+              //     bot.godData[godSearched].originalAbilityFormatted + "\n\u200b"
+              //   )
+              //   .addField(
+              //     "Banned Opponents:",
+              //     bot.godData[godSearched].banned + "\n\u200b"
+              //   )
+              //   .addField(
+              //     "Character Category:",
+              //     bot.godData[godSearched].group + "\n\u200b"
+              //   )
+              //   .addField(
+              //     "App Availability:",
+              //     bot.godData[godSearched].inAppPurchase + "\n\u200b"
+              //   )
+              //   .addField(
+              //     "Compatible with",
+              //     bot.godData[godSearched].compatability
+              //   )
+              //   .setThumbnail(
+              //     "attachment://" + bot.godData[godSearched].imageName + ".jpg"
+              //   );
+              // message.channel.send(embed).catch(console.error);
+              // break;
             } else {
               break;
             }
