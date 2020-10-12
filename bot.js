@@ -783,6 +783,11 @@ bot.on("message", (message) => {
                     bot.godData[godSearched].imageName +
                     ".jpg",
                 ])
+                .attachFiles([
+                  "../ErisBot/images/" +
+                    bot.godData[godSearched].imageName +
+                    "_card.jpg",
+                ])
                 .setColor("0x" + bot.godData[godSearched].borderColor)
                 .addField(
                   bot.godData[godSearched].name,
@@ -796,22 +801,30 @@ bot.on("message", (message) => {
                   "Ability(original):",
                   bot.godData[godSearched].originalAbilityFormatted + "\n\u200b"
                 )
-                .addField(
-                  "Banned Opponents:",
-                  bot.godData[godSearched].banned + "\n\u200b"
+                .addFields(
+                  { name:"Character Category:", value: bot.godData[godSearched].group, inline: true },
+                  { name:"App Availability:", value: bot.godData[godSearched].inAppPurchase, inline: true },
+                  { name: '\u200B', value: '\u200B' },
+                  { name:"Banned Opponents:", value: bot.godData[godSearched].banned, inline: true },
+                  { name:"Compatible with:", value:  bot.godData[godSearched].compatability, inline: true },
                 )
-                .addField(
-                  "Character Category:",
-                  bot.godData[godSearched].group + "\n\u200b"
-                )
-                .addField(
-                  "App Availability:",
-                  bot.godData[godSearched].inAppPurchase + "\n\u200b"
-                )
-                .addField(
-                  "Compatible with",
-                  bot.godData[godSearched].compatability
-                )
+                // .addField(
+                //   "Banned Opponents:",
+                //   bot.godData[godSearched].banned + "\n\u200b"
+                // )
+                // .addField(
+                //   "Character Category:",
+                //   bot.godData[godSearched].group + "\n\u200b"
+                // )
+                // .addField(
+                //   "App Availability:",
+                //   bot.godData[godSearched].inAppPurchase + "\n\u200b"
+                // )
+                // .addField(
+                //   "Compatible with",
+                //   bot.godData[godSearched].compatability
+                // )
+                .setImage("attachment://" + bot.godData[godSearched].imageName + "_card.jpg")
                 .setThumbnail(
                   "attachment://" + bot.godData[godSearched].imageName + ".jpg"
                 );
@@ -840,9 +853,10 @@ bot.on("message", (message) => {
               )
               .addFields(
                 { name:"Character Category:", value: bot.godData[godSearched].group, inline: true },
-                { name:"", value: .setImage("attachment://" + bot.godData[godSearched].imageName + "_card.jpg"), inline: true },
-                { name: '\u200B', value: '\u200B' },
+                // { name: '\u200B', value: '\u200B' },
                 { name:"App Availability:", value: bot.godData[godSearched].inAppPurchase, inline: true },
+                { name: '\u200B', value: '\u200B' },
+                { name:"Banned Opponents:", value: bot.godData[godSearched].banned, inline: true },
                 { name:"Compatible with:", value:  bot.godData[godSearched].compatability, inline: true },
               )
               .setImage("attachment://" + bot.godData[godSearched].imageName + "_card.jpg")
