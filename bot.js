@@ -13,77 +13,8 @@ const PREFIX = config.prefix;
 // const { Client } = require('pg');
 // const client = new Client (dbCreds);
 const { Pool } = require("pg");
+const { version } = require("os");
 const pool = new Pool(dbCreds);
-
-let godArray = [
-  "apollo",
-  "artemis",
-  "athena",
-  "atlas",
-  "demeter",
-  "hephaestus",
-  "hermes",
-  "minotaur",
-  "pan",
-  "prometheus",
-  "aphrodite",
-  "ares",
-  "bia",
-  "chaos",
-  "charon",
-  "chronus",
-  "circe",
-  "dionysus",
-  "eros",
-  "hera",
-  "hestia",
-  "hypnus",
-  "limus",
-  "medusa",
-  "morpheus",
-  "persephone",
-  "poseidon",
-  "selene",
-  "triton",
-  "zeus",
-  "aeolus",
-  "charybdis",
-  "clio",
-  "europaandtalus",
-  "gaea",
-  "graeae",
-  "hades",
-  "harpies",
-  "hecate",
-  "moerae",
-  "nemesis",
-  "siren",
-  "tartarus",
-  "terpsichore",
-  "urania",
-  "achilles",
-  "adonis",
-  "atalanta",
-  "bellerophon",
-  "heracles",
-  "jason",
-  "medea",
-  "odysseus",
-  "polyphemus",
-  "theseus",
-  "asteria",
-  "castorandpollux",
-  "eris",
-  "hippolyta",
-  "iris",
-  "maenads",
-  "pegasus",
-  "proteus",
-  "scylla",
-  "tyche",
-  "hydra",
-  "nyx",
-];
 
 // Ready statement
 bot.on("ready", () => {
@@ -103,6 +34,9 @@ bot.on("debug", (err) => console.info(`${getTimeStamp()} :: ${err}`));
 
 // Link to God data
 bot.godData = require("./godData.json");
+bot.allGodsArray = require("./allGodsArray.js");
+const godArray = bot.allGodsArray.allGods;
+bot.statusArray = require("./statusArray.js");
 
 // JOIN ME ONLINE Interval check
 setInterval(function () {
@@ -312,7 +246,7 @@ bot.on("message", (message) => {
 
   if (
     godArray.indexOf(lowerCase(args[0])) >= 0 ||
-    godArray.indexOf(lowerCase(args[0])) <= 66
+    godArray.indexOf(lowerCase(args[0])) <= godArray.length
   ) {
     args[0] = lowerCase(args[0]);
     if (args[0].slice(0, 6) === "castor") {
@@ -808,22 +742,6 @@ bot.on("message", (message) => {
                   { name:"Banned Opponents:", value: bot.godData[godSearched].banned, inline: true },
                   { name:"Compatible with:", value:  bot.godData[godSearched].compatability, inline: true },
                 )
-                // .addField(
-                //   "Banned Opponents:",
-                //   bot.godData[godSearched].banned + "\n\u200b"
-                // )
-                // .addField(
-                //   "Character Category:",
-                //   bot.godData[godSearched].group + "\n\u200b"
-                // )
-                // .addField(
-                //   "App Availability:",
-                //   bot.godData[godSearched].inAppPurchase + "\n\u200b"
-                // )
-                // .addField(
-                //   "Compatible with",
-                //   bot.godData[godSearched].compatability
-                // )
                 .setImage("attachment://" + bot.godData[godSearched].imageName + "_card.jpg")
                 .setThumbnail(
                   "attachment://" + bot.godData[godSearched].imageName + ".jpg"
@@ -865,42 +783,6 @@ bot.on("message", (message) => {
               );
             message.channel.send(embed).catch(console.error);
             break;
-              // const embed = new Discord.MessageEmbed()
-              //   .attachFiles([
-              //     "../ErisBot/images/" +
-              //       bot.godData[godSearched].imageName +
-              //       ".jpg",
-              //   ])
-              //   .setColor("0x" + bot.godData[godSearched].borderColor)
-              //   .addField(
-              //     bot.godData[godSearched].name,
-              //     bot.godData[godSearched].title + "\n\u200b"
-              //   )
-              //   .addField(
-              //     "Ability:",
-              //     bot.godData[godSearched].originalAbilityFormatted + "\n\u200b"
-              //   )
-              //   .addField(
-              //     "Banned Opponents:",
-              //     bot.godData[godSearched].banned + "\n\u200b"
-              //   )
-              //   .addField(
-              //     "Character Category:",
-              //     bot.godData[godSearched].group + "\n\u200b"
-              //   )
-              //   .addField(
-              //     "App Availability:",
-              //     bot.godData[godSearched].inAppPurchase + "\n\u200b"
-              //   )
-              //   .addField(
-              //     "Compatible with",
-              //     bot.godData[godSearched].compatability
-              //   )
-              //   .setThumbnail(
-              //     "attachment://" + bot.godData[godSearched].imageName + ".jpg"
-              //   );
-              // message.channel.send(embed).catch(console.error);
-              // break;
             } else {
               break;
             }
@@ -1134,7 +1016,7 @@ async function dmArchive(message) {
 }
 
 function dmError(err) {
-  let adminUser = bot.users.cache.get(`${config.adminID}`);
+  let adminUser = bot.users.cache.get(`${config.adminId}`);
   adminUser.send(`ERROR: ${getTimeStamp()} :: ${err.stack}`);
 }
 
@@ -1142,64 +1024,10 @@ async function updateStatus() {
   var watchPlay = [0, 1];
   shuffle(watchPlay);
   if (watchPlay[0] == 0) {
-    var statusArray = [
-      "Santorini",
-      "Dice Throne",
-      "Dice Throne Adventures",
-      "Steampunk Rally",
-      "Steampunk Rally Fusion",
-      "Super Motherload",
-      "Brass: Birmingham",
-      "Brass: Lancashire",
-      "SKYRISE",
-      "Santorini App",
-      "The Royal Game of Ur",
-      "7 Wonders",
-      "7 Wonders Duel",
-      "Acropolis of Athens",
-      "Agamemnon",
-      "Elysium",
-      "Corinth",
-      "Lords of Hellas",
-      "Oracle of Delphi",
-      "Cyclades ",
-      "Hoplite",
-      "Poseidon's Kingdom",
-      "Sid Meier's Civilization",
-      "Sparta",
-      "Through the Ages",
-      "Zeus on the Loose",
-      "Mythic Battles: Pantheon",
-      "Deus",
-      "Olympos",
-      "Mythtopia",
-      "Helios",
-      "Poseidon",
-      "Ancient Terrible Things",
-      "Pantheon",
-      "Hera And Zeus",
-      "Fate Of The Elder Gods",
-      "Risk: Godstorm",
-      "Chez Greek",
-      "Archipelago",
-      "Forbidden Island",
-      "Akrotiri",
-      "Islebound",
-      "Sleeping Gods",
-      "History Of The World",
-      "Peleppones",
-      "Perikles",
-      "Iliad",
-      "Dixit: Odyssey",
-      "Apples To Apples",
-      "Gorilla Marketing",
-      "Gods & Monsters",
-      "Rise Of The Argonauts",
-      "NyxQuest: Kindred Spirits",
-    ];
-    shuffle(statusArray);
+    var playing = bot.statusArray.watching;
+    shuffle(playing);
     bot.user
-      .setActivity(statusArray[0], {
+      .setActivity(playing[0], {
         type: "PLAYING",
       })
       .then((presence) =>
@@ -1207,44 +1035,10 @@ async function updateStatus() {
       )
       .catch(console.error);
   } else if (watchPlay[0] == 1) {
-    var statusArray = [
-      "Rahdo Runs Through",
-      "The Undead Viking",
-      "Watch It Played",
-      "Tantrum House",
-      "Man Vs. Meeple",
-      "The Cardboard Kid",
-      "Gaming With Edo",
-      "Shut Up & Sit Down",
-      "LoadingReadyRun",
-      "Actualol",
-      "No Pun Included",
-      "Drive Thru Review",
-      "The Game Boy Geek",
-      "The Dice Tower",
-      "Jon Gets Games",
-      "Heavy Cardboard",
-      "Roxley's YouTube Channel",
-      "Board Game Revolution",
-      "Geek & Sundry",
-      "Meeple University",
-      "Jason and the Argonauts",
-      "Troy",
-      "300",
-      "Atlantis",
-      "Clash of the Titans",
-      "Wrath of the Titans",
-      "The Odyssey",
-      "Hercules",
-      "Odissea",
-      "Fury of Achilles",
-      "My Big Fat Greek Wedding",
-      "Grease",
-      "Sinbad: Legend Of The Seven Seas",
-    ];
-    shuffle(statusArray);
+    var watching = bot.statusArray.watching;
+    shuffle(watching);
     bot.user
-      .setActivity(statusArray[0], {
+      .setActivity(watching[0], {
         type: "WATCHING",
       })
       .then((presence) =>
