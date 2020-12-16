@@ -20,17 +20,10 @@
   },
   "homepage": "https://github.com/PurpleCapedCrusader/ErisBot#readme",
   "dependencies": {
-    "@hapi/cryptiles": "^5.1.0",
     "check-types": "^11.1.2",
-    "dblapi.js": "^2.4.1",
-    "discord.js": "^12.3.1",
-    "express": "^4.17.1",
+    "discord.js": "^12.5.1",
     "lodash": "^4.17.20",
-    "lower-case": "^1.1.4",
-    "pg": "^7.18.2",
-    "request": "2.81.0"
-  },
-  "devDependencies": {
-    "install-peers": "^1.0.3"
+    "lower-case": "^2.0.2",
+    "pg": "^8.5.1"
   }
 }

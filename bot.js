@@ -1,8 +1,8 @@
 ﻿const Discord = require("discord.js");
-// const express = require('express');
 const config = require("./config.json");
 var dbCreds = require("./dbCreds.js");
-var lowerCase = require("lower-case");
+// var lowerCase = require("lower-case");
+const { lowerCase } = require("lower-case");
 var check = require("check-types");
 const databaseCheck = require("./databaseBuilder.js");
 var godReactions = require("./godReactions.js");
@@ -10,8 +10,6 @@ const fs = require("fs");
 const _ = require("lodash");
 const bot = new Discord.Client();
 const PREFIX = config.prefix;
-// const { Client } = require('pg');
-// const client = new Client (dbCreds);
 const { Pool } = require("pg");
 const { version } = require("os");
 const pool = new Pool(dbCreds);
@@ -794,6 +792,11 @@ bot.on("message", (message) => {
   }
 });
 
+function dmError(err) {
+  let adminUser = bot.users.cache.get(`${config.adminId}`);
+  adminUser.send(`ERROR: ${getTimeStamp()} :: ${err.stack}`);
+}
+
 function getTimeStamp() {
   let now = new Date();
   return "[" + now.toLocaleString() + "]";
@@ -1013,11 +1016,6 @@ async function dmArchive(message) {
       client.release();
     }
   })().catch((err) => console.log(err.stack));
-}
-
-function dmError(err) {
-  let adminUser = bot.users.cache.get(`${config.adminId}`);
-  adminUser.send(`ERROR: ${getTimeStamp()} :: ${err.stack}`);
 }
 
 async function updateStatus() {
