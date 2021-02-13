@@ -2,9 +2,9 @@
   "name": "erisbot",
   "version": "1.0.0",
   "description": "Santorini Discord Bot",
-  "main": "bot.js",
+  "main": "eris.js",
   "scripts": {
-    "start": "node bot.js"
+    "start": "node eris.js"
   },
   "repository": {
     "type": "git",

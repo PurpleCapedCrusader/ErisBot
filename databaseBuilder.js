@@ -84,7 +84,7 @@ async function createSchemaIfNotExist() {
                 OWNER to ${config.connUser};`)
         } catch (e) {
             await client.query('ROLLBACK')
-            throw e
+            console.log(e)
         } finally {
             // Make sure to release the client before any error handling,
             // just in case the error handling itself throws an error.

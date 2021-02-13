@@ -793,6 +793,7 @@ bot.on("message", (message) => {
 });
 
 function dmError(err) {
+  console.log(`${config.adminId}`)
   let adminUser = bot.users.cache.get(`${config.adminId}`);
   adminUser.send(`ERROR: ${getTimeStamp()} :: ${err.stack}`);
 }
@@ -808,7 +809,7 @@ async function removeTempOnlineRole() {
     try {
       let currentTime = Date.now();
       const query = await client.query(
-        `SELECT * FROM public.online_role_tracking WHERE remove_time < ${currentTime} AND status = true`
+        `SELECT * FROM eris_schema.online_role_tracking WHERE remove_time < ${currentTime} AND status = true`
       );
       query.rows.forEach((row) => {
         let member = bot.guilds.cache.get(row.guild_id).member(row.author_id);
@@ -817,7 +818,7 @@ async function removeTempOnlineRole() {
           .roles.cache.find((rName) => rName.id === row.temp_role_id);
         member.roles.remove(role_id).catch(console.error);
         client.query(
-          `UPDATE public.online_role_tracking SET status = false WHERE onlineroletracking_id = ${row.onlineroletracking_id}`
+          `UPDATE eris_schema.online_role_tracking SET status = false WHERE onlineroletracking_id = ${row.onlineroletracking_id}`
         );
         console.log(
           `${row.author_username} was removed from the ${row.temp_role} role group in the ${row.guild_name} channel.`
@@ -857,7 +858,7 @@ async function setTempOnlineRole(durationRequested, message, roleRequested) {
       };
       await client.query("BEGIN");
       const insertTempRoleRequestText =
-        "INSERT INTO public.online_role_tracking(guild_name, guild_id, channel_name, channel_id, message_id, author_username, author_id, member_nickname, temp_role, temp_role_id, readable_timestamp, start_time, duration_requested, remove_time, status) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)";
+        "INSERT INTO eris_schema.online_role_tracking(guild_name, guild_id, channel_name, channel_id, message_id, author_username, author_id, member_nickname, temp_role, temp_role_id, readable_timestamp, start_time, duration_requested, remove_time, status) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)";
       const insertTempRoleRequestValues = [
         onlineRequest.guild_name,
         onlineRequest.guild_id,
@@ -961,7 +962,7 @@ async function messageArchive(message) {
       };
       await client.query("BEGIN");
       const insertMessageArchiveText =
-        "INSERT INTO public.message_archive(readable_timestamp, guild_name, guild_id, channel_name, channel_id, message_id, author_id, author_username, member_nickname, message_timestamp, message_content) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)";
+        "INSERT INTO eris_schema.message_archive(readable_timestamp, guild_name, guild_id, channel_name, channel_id, message_id, author_id, author_username, member_nickname, message_timestamp, message_content) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)";
       const insertMessageArchiveValues = [
         prepMessageArchive.readable_timestamp,
         prepMessageArchive.guild_name,
@@ -999,7 +1000,7 @@ async function dmArchive(message) {
       };
       await client.query("BEGIN");
       const insertDmArchiveText =
-        "INSERT INTO public.dm_archive(readable_timestamp, author_username, author_id, message_timestamp, message_content) VALUES ($1, $2, $3, $4, $5)";
+        "INSERT INTO eris_schema.dm_archive(readable_timestamp, author_username, author_id, message_timestamp, message_content) VALUES ($1, $2, $3, $4, $5)";
       const insertDmArchiveValues = [
         prepDmArchive.readable_timestamp,
         prepDmArchive.author_username,
