@@ -5,12 +5,15 @@ const {
 } = require('pg');
 const pool = new Pool(dbCreds);
 
-async function createDatabaseTablesIfNotExist() {
+async function createSchemaIfNotExist() {
     ;
     (async () => {
         const client = await pool.connect()
         try {
-            await client.query(`CREATE TABLE IF NOT EXISTS public.dm_archive
+
+            await client.query(`CREATE SCHEMA IF NOT EXISTS eris_schema AUTHORIZATION ${config.connUser};`)
+
+            await client.query(`CREATE TABLE IF NOT EXISTS eris_schema.dm_archive
             (
                 dm_archive_id SERIAL NOT NULL,
                 readable_timestamp character varying COLLATE pg_catalog."default",
@@ -25,10 +28,10 @@ async function createDatabaseTablesIfNotExist() {
             )
             TABLESPACE pg_default;
             
-            ALTER TABLE public.dm_archive
+            ALTER TABLE eris_schema.dm_archive
                 OWNER to ${config.connUser};`)
 
-            await client.query(`CREATE TABLE IF NOT EXISTS public.message_archive
+            await client.query(`CREATE TABLE IF NOT EXISTS eris_schema.message_archive
             (
                 messagearchive_id SERIAL NOT NULL,
                 readable_timestamp character varying(30) COLLATE pg_catalog."default",
@@ -49,10 +52,10 @@ async function createDatabaseTablesIfNotExist() {
             )
             TABLESPACE pg_default;
             
-            ALTER TABLE public.message_archive
+            ALTER TABLE eris_schema.message_archive
                 OWNER to ${config.connUser};`)
 
-            await client.query(`CREATE TABLE IF NOT EXISTS public.online_role_tracking
+            await client.query(`CREATE TABLE IF NOT EXISTS eris_schema.online_role_tracking
             (
                 onlineroletracking_id SERIAL NOT NULL,
                 guild_name character varying(100) COLLATE pg_catalog."default",
@@ -77,7 +80,7 @@ async function createDatabaseTablesIfNotExist() {
             )
             TABLESPACE pg_default;
             
-            ALTER TABLE public.online_role_tracking
+            ALTER TABLE eris_schema.online_role_tracking
                 OWNER to ${config.connUser};`)
         } catch (e) {
             await client.query('ROLLBACK')
@@ -90,4 +93,4 @@ async function createDatabaseTablesIfNotExist() {
     })().catch(err => console.log(err.stack))
 }
 
-module.exports = createDatabaseTablesIfNotExist();
+module.exports = createSchemaIfNotExist();
