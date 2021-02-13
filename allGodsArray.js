@@ -66,16 +66,6 @@ const allGods = [
     "tyche",
     "hydra",
     "nyx",
-    "Agamemnon",
-    "Aloadae",
-    "Arachne",
-    "Phobos",
-    "Khione",
-    "Eirene",
-    "Metis",
-    "OrpheusandEurydice",
-    "Mnemosyne",
-    "Antaeus",
 ];
 
 module.exports = {
