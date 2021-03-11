@@ -116,9 +116,7 @@ bot.on("message", (message) => {
 
   // react with emojis for mentioned gods
   if (
-    message.channel.type != "dm" &&
-    message.guild.id === config.guildId &&
-    !message.author.bot
+    message.channel.type != "dm" && message.channel.parent.id != config.puzzleCategory && !message.author.bot
   ) {
     try {
       let messageArray = (message.content)
