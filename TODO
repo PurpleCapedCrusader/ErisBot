@@ -5,5 +5,5 @@ TODO
 4. Maybe add instagram feed - https://github.com/axios/axios
 5. DONE - !:heart: adds user to 'eris loves' role for 1 hour
 6. DONE - custom greetings from erisbot - https://github.com/discordjs/discord.js/blob/a30fc878161c497a8f71db2ee62370b59388a297/docs/examples/greeting.js
-7. automatically react with the god emoji if the god is mentioned in the message.
-8. Git test.
+7. DONE - automatically react with the god emoji if the god is mentioned in the message.
+8. Add newest member to Recently Joined role. Remove them when another person joins or leave them in the role for 7 days.
