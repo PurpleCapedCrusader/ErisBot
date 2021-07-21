@@ -69,5 +69,5 @@ const allGods = [
 ];
 
 module.exports = {
-    allGods: allGods,
+    allGods: allGods
 };

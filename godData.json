@@ -463,7 +463,7 @@
   },
   {
     "number": 34,
-    "imageName": "EuropaAndTalus",
+    "imageName": "EuropaTalus",
     "name": "Europa and Talus",
     "title": "Queen & Guardian Automaton",
     "originalAbilityFormatted": "Setup: Place the Talus Token on your God Power card.\n\nEnd of Your Turn: You may relocate your Talus Token to an unoccupied space neighboring the Worker that moved.\n\nAny Time: All players treat the space containing the Talus Token as if it contains only a dome.",
@@ -785,7 +785,7 @@
   },
   {
     "number": 102,
-    "imageName": "CastorAndPollux",
+    "imageName": "CastorPollux",
     "name": "Castor and Pollux",
     "title": "no title",
     "originalAbilityFormatted": "Your Turn: Instead of your normal turn, you may take a special turn in which all your Workers move and you do not build, or in which none of your Workers move, but all build.",
