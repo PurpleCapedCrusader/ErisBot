@@ -552,7 +552,7 @@ bot.on("message", (message) => {
           )
           .addField(
             "**Rules PDF Download**",
-            "https://roxley.com/wp-content/uploads/2016/08/Santorini-Rulebook-Web-2016.08.14.pdf"
+            "http://files.roxley.com/Santorini-Rulebook-Web-2016.08.14.pdf"
           );
         message.channel.send(embed).catch(console.error);
         break;
