@@ -1,40 +1,47 @@
-﻿const Discord = require("discord.js");
+﻿const { Client, Collection, Intents } = require("discord.js");
 const config = require("./config.json");
 var dbCreds = require("./dbCreds.js");
-// var lowerCase = require("lower-case");
-const { lowerCase } = require("lower-case");
+const pkg = require("./package.json");
+const activityStatus = require("./activityStatus.js");
 var check = require("check-types");
 const databaseCheck = require("./databaseBuilder.js");
-var godReactions = require("./godReactions.js");
+const { lowerCase } = require("lower-case");
+const godReactions = require("./godReactions.js");
 const fs = require("fs");
 const _ = require("lodash");
-const bot = new Discord.Client();
 const PREFIX = config.prefix;
 const { Pool } = require("pg");
-const { version } = require("os");
+const standardResponse = require("./standardResponse.js");
+// const { version } = require("os");
 const pool = new Pool(dbCreds);
+const client = new Client({ intents: 32767 });
+
+module.exports = client;
+client.commands = new Collection();
+client.slashCommands = new Collection();
+require("./handler")(client);
+
+// Link to God data
+client.godData = require("./godData.json");
+client.allGodsArray = require("./allGodsArray.js");
+const godArray = client.allGodsArray.allGods;
 
 // Ready statement
-bot.on("ready", () => {
+client.once("ready", () => {
   console.log(
     `${getTimeStamp()} :: ErisBot is ready to serve on ${
-      bot.guilds.cache.size
-    } servers, for ${bot.users.cache.size} users.`
+      client.guilds.cache.size
+    } servers, for ${client.users.cache.size} users.`
   );
   updateStatus();
+  adminNotify(`ErisBot version ${pkg.version} started: ${getTimeStamp()}`);
   databaseCheck.createDatabaseTablesIfNotExist;
 });
 
 // error catch-all
-bot.on("error", (err) => console.error(`${getTimeStamp()} :: ${err}`));
-bot.on("warn", (err) => console.warn(`${getTimeStamp()} :: ${err}`));
-bot.on("debug", (err) => console.info(`${getTimeStamp()} :: ${err}`));
-
-// Link to God data
-bot.godData = require("./godData.json");
-bot.allGodsArray = require("./allGodsArray.js");
-const godArray = bot.allGodsArray.allGods;
-bot.statusArray = require("./statusArray.js");
+client.on("error", (err) => console.error(`${getTimeStamp()} :: ${err}`));
+client.on("warn", (err) => console.warn(`${getTimeStamp()} :: ${err}`));
+client.on("debug", (err) => console.info(`${getTimeStamp()} :: ${err}`));
 
 // JOIN ME ONLINE Interval check
 setInterval(function () {
@@ -45,7 +52,7 @@ setInterval(function () {
   updateStatus();
 }, 900000); // 60000 = 1min
 
-bot.on("guildMemberAdd", (member) => {
+client.on("guildMemberAdd", (member) => {
   const embed = new Discord.MessageEmbed()
     .setColor("0xd9ff00")
     .setTitle("Welcome")
@@ -105,9 +112,9 @@ bot.on("guildMemberAdd", (member) => {
 });
 
 // Main Args/Response
-bot.on("message", (message) => {
+client.on("messageCreate", (message) => {
   if (!message.author.bot) {
-    if (message.channel.type === "dm") {
+    if (message.channel.type === "DM") {
       dmArchive(message);
     } else {
       messageArchive(message);
@@ -116,7 +123,9 @@ bot.on("message", (message) => {
 
   // react with emojis for mentioned gods
   if (
-    message.channel.type != "dm" && message.channel.parent.id != config.puzzleCategory && !message.author.bot
+    message.channel.type != "dm" && 
+    message.channel.parentId != config.puzzleCategory && 
+    !message.author.bot
   ) {
     try {
       let messageArray = (message.content)
@@ -144,14 +153,6 @@ bot.on("message", (message) => {
 
   if (!message.content.startsWith(PREFIX) || message.author.bot) {
     return;
-  }
-
-  if (message.content === "!react") {
-    message.react("❤️");
-  }
-
-  if (message.content === "!names") {
-    message.channel.send("eris pan");
   }
 
   // Add God Role (remove old god role if exists)
@@ -618,33 +619,33 @@ bot.on("message", (message) => {
       case "update-info": // todo: make this response a DM back to the author
         var arrayLength = godArray.length;
         for (var i = 0; i < arrayLength; i++) {
-          if (bot.godData[i].update == "Updated") {
+          if (client.godData[i].update == "Updated") {
             const embed = new Discord.MessageEmbed()
               .attachFiles([
-                "../ErisBot/images/" + bot.godData[i].imageName + ".jpg",
+                "../ErisBot/images/" + client.godData[i].imageName + ".jpg",
               ])
-              .setColor("0x" + bot.godData[i].borderColor)
-              .addField(bot.godData[i].name, bot.godData[i].title + "\n\u200b")
+              .setColor("0x" + client.godData[i].borderColor)
+              .addField(client.godData[i].name, client.godData[i].title + "\n\u200b")
               .addField(
                 "Ability(updated):",
-                bot.godData[i].updatedAbilityFormatted + "\n\u200b"
+                client.godData[i].updatedAbilityFormatted + "\n\u200b"
               )
               .addField(
                 "Ability(original):",
-                bot.godData[i].originalAbilityFormatted + "\n\u200b"
+                client.godData[i].originalAbilityFormatted + "\n\u200b"
               )
-              .addField("Banned Opponents:", bot.godData[i].banned + "\n\u200b")
+              .addField("Banned Opponents:", client.godData[i].banned + "\n\u200b")
               .addField(
                 "Character Category:",
-                bot.godData[i].group + "\n\u200b"
+                client.godData[i].group + "\n\u200b"
               )
               .addField(
                 "App Availability:",
-                bot.godData[i].inAppPurchase + "\n\u200b"
+                client.godData[i].inAppPurchase + "\n\u200b"
               )
-              .addField("Compatible with", bot.godData[i].compatability)
+              .addField("Compatible with", client.godData[i].compatability)
               .setThumbnail(
-                "attachment://" + bot.godData[i].imageName + ".jpg"
+                "attachment://" + client.godData[i].imageName + ".jpg"
               );
             message.author.send(embed).catch(console.error);
           }
@@ -701,89 +702,96 @@ bot.on("message", (message) => {
         break;
 
       // GOD INFO - MUST GO LAST BECAUSE IT TAKES ALL CASES
-      case args[0]:
-        var arrayLength = godArray.length;
-        for (var i = 0; i < arrayLength; i++) {
-          if (godArray[i] == lowerCase(args[0])) {
-            var godSearched = godArray.indexOf(lowerCase(args[0]));
-            if (bot.godData[godSearched].update == "Updated") {
-              const embed = new Discord.MessageEmbed()
-                .attachFiles([
-                  "../ErisBot/images/" +
-                    bot.godData[godSearched].imageName +
-                    ".jpg",
-                ])
-                .attachFiles([
-                  "../ErisBot/images/" +
-                    bot.godData[godSearched].imageName +
-                    "_card.jpg",
-                ])
-                .setColor("0x" + bot.godData[godSearched].borderColor)
-                .addField(
-                  bot.godData[godSearched].name,
-                  bot.godData[godSearched].title + "\n\u200b"
-                )
-                .addField(
-                  "Ability(updated):",
-                  bot.godData[godSearched].updatedAbilityFormatted + "\n\u200b"
-                )
-                .addField(
-                  "Ability(original):",
-                  bot.godData[godSearched].originalAbilityFormatted + "\n\u200b"
-                )
-                .addFields(
-                  { name:"Character Category:", value: bot.godData[godSearched].group, inline: true },
-                  { name:"App Availability:", value: bot.godData[godSearched].inAppPurchase, inline: true },
-                  { name: '\u200B', value: '\u200B' },
-                  { name:"Banned Opponents:", value: bot.godData[godSearched].banned, inline: true },
-                  { name:"Compatible with:", value:  bot.godData[godSearched].compatability, inline: true },
-                )
-                .setImage("attachment://" + bot.godData[godSearched].imageName + "_card.jpg")
-                .setThumbnail(
-                  "attachment://" + bot.godData[godSearched].imageName + ".jpg"
-                );
-              message.channel.send(embed).catch(console.error);
-              break;
-            } else if (bot.godData[godSearched].update == "Same") {
-              const embed = new Discord.MessageEmbed()
-              .attachFiles([
-                "../ErisBot/images/" +
-                  bot.godData[godSearched].imageName +
-                  ".jpg",
-              ])
-              .attachFiles([
-                "../ErisBot/images/" +
-                  bot.godData[godSearched].imageName +
-                  "_card.jpg",
-              ])
-              .setColor("0x" + bot.godData[godSearched].borderColor)
-              .addField(
-                bot.godData[godSearched].name,
-                bot.godData[godSearched].title + "\n\u200b"
-              )
-              .addField(
-                "Ability:",
-                bot.godData[godSearched].originalAbilityFormatted + "\n\u200b"
-              )
-              .addFields(
-                { name:"Character Category:", value: bot.godData[godSearched].group, inline: true },
-                // { name: '\u200B', value: '\u200B' },
-                { name:"App Availability:", value: bot.godData[godSearched].inAppPurchase, inline: true },
-                { name: '\u200B', value: '\u200B' },
-                { name:"Banned Opponents:", value: bot.godData[godSearched].banned, inline: true },
-                { name:"Compatible with:", value:  bot.godData[godSearched].compatability, inline: true },
-              )
-              .setImage("attachment://" + bot.godData[godSearched].imageName + "_card.jpg")
-              .setThumbnail(
-                "attachment://" + bot.godData[godSearched].imageName + ".jpg"
-              );
-            message.channel.send(embed).catch(console.error);
-            break;
-            } else {
-              break;
-            }
-          }
-        }
+      // case args[0]:
+      //   var arrayLength = godArray.length;
+      //   for (var i = 0; i < arrayLength; i++) {
+      //     if (godArray[i] == lowerCase(args[0])) {
+      //       var godSearched = godArray.indexOf(lowerCase(args[0]));
+      //       if (client.godData[godSearched].update == "Updated") {
+      //         const embed = new Discord.MessageEmbed()
+      //           .attachFiles([
+      //             "../ErisBot/images/" +
+      //               client.godData[godSearched].imageName +
+      //               ".jpg",
+      //           ])
+      //           .attachFiles([
+      //             "../ErisBot/images/" +
+      //               client.godData[godSearched].imageName +
+      //               "_card.jpg",
+      //           ])
+      //           .setColor("0x" + client.godData[godSearched].borderColor)
+      //           .addField(
+      //             client.godData[godSearched].name,
+      //             client.godData[godSearched].title + "\n\u200b"
+      //           )
+      //           .addField(
+      //             "Ability(updated):",
+      //             client.godData[godSearched].updatedAbilityFormatted + "\n\u200b"
+      //           )
+      //           .addField(
+      //             "Ability(original):",
+      //             client.godData[godSearched].originalAbilityFormatted + "\n\u200b"
+      //           )
+      //           .addFields(
+      //             { name:"Character Category:", value: client.godData[godSearched].group, inline: true },
+      //             { name:"App Availability:", value: client.godData[godSearched].inAppPurchase, inline: true },
+      //             { name: '\u200B', value: '\u200B' },
+      //             { name:"Banned Opponents:", value: client.godData[godSearched].banned, inline: true },
+      //             { name:"Compatible with:", value:  client.godData[godSearched].compatability, inline: true },
+      //           )
+      //           .setImage("attachment://" + client.godData[godSearched].imageName + "_card.jpg")
+      //           .setThumbnail(
+      //             "attachment://" + client.godData[godSearched].imageName + ".jpg"
+      //           );
+      //         message.channel.send(embed).catch(console.error);
+      //         break;
+
+
+
+
+
+
+              
+      //       } else if (client.godData[godSearched].update == "Same") {
+      //         const embed = new Discord.MessageEmbed()
+      //         .attachFiles([
+      //           "../ErisBot/images/" +
+      //             client.godData[godSearched].imageName +
+      //             ".jpg",
+      //         ])
+      //         .attachFiles([
+      //           "../ErisBot/images/" +
+      //             client.godData[godSearched].imageName +
+      //             "_card.jpg",
+      //         ])
+      //         .setColor("0x" + client.godData[godSearched].borderColor)
+      //         .addField(
+      //           client.godData[godSearched].name,
+      //           client.godData[godSearched].title + "\n\u200b"
+      //         )
+      //         .addField(
+      //           "Ability:",
+      //           client.godData[godSearched].originalAbilityFormatted + "\n\u200b"
+      //         )
+      //         .addFields(
+      //           { name:"Character Category:", value: client.godData[godSearched].group, inline: true },
+      //           // { name: '\u200B', value: '\u200B' },
+      //           { name:"App Availability:", value: client.godData[godSearched].inAppPurchase, inline: true },
+      //           { name: '\u200B', value: '\u200B' },
+      //           { name:"Banned Opponents:", value: client.godData[godSearched].banned, inline: true },
+      //           { name:"Compatible with:", value:  client.godData[godSearched].compatability, inline: true },
+      //         )
+      //         .setImage("attachment://" + client.godData[godSearched].imageName + "_card.jpg")
+      //         .setThumbnail(
+      //           "attachment://" + client.godData[godSearched].imageName + ".jpg"
+      //         );
+      //       message.channel.send(embed).catch(console.error);
+      //       break;
+      //       } else {
+      //         break;
+      //       }
+      //     }
+      //   }
     }
   } else {
     return;
@@ -792,8 +800,18 @@ bot.on("message", (message) => {
 
 function dmError(err) {
   console.log(`${config.adminId}`)
-  let adminUser = bot.users.cache.get(`${config.adminId}`);
+  let adminUser = client.users.cache.get(`${config.adminId}`);
   adminUser.send(`ERROR: ${getTimeStamp()} :: ${err.stack}`);
+}
+
+async function adminNotify(msg) {
+  try {
+    //Admin user object for DM notifications
+    const adminUser = client.users.fetch(`${config.adminId}`);
+    (await adminUser).send(msg);
+  } catch (err) {
+    dmError(err);
+  }
 }
 
 function getTimeStamp() {
@@ -810,8 +828,8 @@ async function removeTempOnlineRole() {
         `SELECT * FROM eris_schema.online_role_tracking WHERE remove_time < ${currentTime} AND status = true`
       );
       query.rows.forEach((row) => {
-        let member = bot.guilds.cache.get(row.guild_id).member(row.author_id);
-        let role_id = bot.guilds.cache
+        let member = client.guilds.cache.get(row.guild_id).member(row.author_id);
+        let role_id = client.guilds.cache
           .get(row.guild_id)
           .roles.cache.find((rName) => rName.id === row.temp_role_id);
         member.roles.remove(role_id).catch(console.error);
@@ -1018,31 +1036,32 @@ async function dmArchive(message) {
 }
 
 async function updateStatus() {
-  var watchPlay = [0, 1];
-  shuffle(watchPlay);
-  if (watchPlay[0] == 0) {
-    var playing = bot.statusArray.watching;
-    shuffle(playing);
-    bot.user
-      .setActivity(playing[0], {
-        type: "PLAYING",
-      })
-      .then((presence) =>
-        console.log(`Activity set to ${presence.activities[0].name}`)
-      )
-      .catch(console.error);
-  } else if (watchPlay[0] == 1) {
-    var watching = bot.statusArray.watching;
-    shuffle(watching);
-    bot.user
-      .setActivity(watching[0], {
-        type: "WATCHING",
-      })
-      .then((presence) =>
-        console.log(`Activity set to ${presence.activities[0].name}`)
-      )
-      .catch(console.error);
-  }
+  try {
+	var watchPlay = [0, 1];
+	shuffle(watchPlay);
+	if (watchPlay[0] == 0) {
+		var statusArray = activityStatus.playing;
+		var activityType = "PLAYING";
+	} else if (watchPlay[0] == 1) {
+		var statusArray = activityStatus.watching;
+		var activityType = "WATCHING";
+	} 
+  // else if (watchPlay[0] == 4) {
+	// 	var statusArray = activityStatus.listening;
+	// 	var activityType = "LISTENING";
+	// }
+	shuffle(statusArray);
+	client.user
+		.setActivity(`${statusArray[0]}`, {
+			type: activityType,
+		})
+		// .then((presence) =>
+		// 	console.log(`${activityType} ${presence.activities[0].name}`)
+		// )
+  } catch(err) {
+			dmError(err);
+		};
 }
+
 // Super Secret Token!!!
-bot.login(config.token);
+client.login(config.token);

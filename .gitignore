@@ -1,5 +1,6 @@
 config.json
 /images/
+/database_queries/
 *.jpg
 messageExample.json
 dmExample.json

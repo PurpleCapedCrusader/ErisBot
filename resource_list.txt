@@ -10,3 +10,5 @@ https://anidiots.guide/
 Promo cards:
 https://web.archive.org/web/20180803150857/https://roxley.com/santorini-underworld-promo-cards/
 
+Slash Command setup:
+https://github.com/reconlx/djs-base-handler
