@@ -124,7 +124,8 @@ client.on("messageCreate", (message) => {
   // react with emojis for mentioned gods
   if (
     message.channel.type != "dm" && 
-    message.channel.parentId != config.puzzleCategory && 
+    message.channel.parentId != config.puzzleCategory &&
+    message.channel.parentId != config.puzzleCategoryGarage && 
     !message.author.bot
   ) {
     try {

@@ -1,0 +1,67 @@
+[
+  {
+    "number": 0,
+    "title": "Block",
+    "definition": "A part of a **tower** an forms a space on the board. When you **build**, place **blocks** from largest to smallest so that they stack."
+  },
+  {
+    "number": 1,
+    "title": "Build",
+    "definition": "A **block** or dome on an unoccupied space **neighboring** the **moved Worker**.\n\u200b \n\u200bYou can **build** onto a **level** of any height, but you __**must**__ choose the correct shape of **block** or **dome** for the **level** being built. A tower with 3 blocks and a **dome** is considered a “**Complete Tower**”."
+  },
+  {
+    "number": 2,
+    "title": "Complete Tower",
+    "definition": "Consists of exactly three **blocks** and a **dome**."
+  },
+  {
+    "number": 3,
+    "title": "Dome",
+    "definition": "The top level ona  **Tower**. **Domes** cannot have anything placed upon them. a **dome** may only be **built** on top of the third level, unless otherwise specified by a **God** or **Hero Power**.\n\u200b \n\u200b**Domes are not blocks**\n\u200bIf the **God Power** description states it affects **blocks**, it does not affect **domes**."
+  },
+  {
+    "number": 4,
+    "title": "Force",
+    "definition": "**“Forced” is not “moved”.**\n\u200b \n\u200bSome **God Powers** may cause **Workers** to be “**forced**” into another space. A **Worker** that is **forced**, is not considered to have **moved**.\n\u200b \n\u200b__**Remember:**__ to win the game by moving onto the third level, your **Worker** must **move up** during __your__ turn. Therefore, if your **Worker** is **Forced** onto the third level, you do not win the game. **Moving** from one third level space to another also does not trigger a win. \n\u200b"
+  },
+  {
+    "number": 5,
+    "title": "Move",
+    "definition": "Move your selected **Worker** into one of the (up to) eight **neighboring** spaces.\n\u200b \n\u200bA **Worker** may **move up** a maximum of one level higher, **move down** any number of levels lower, or **move** along the samelevel. A **Worker** may not **move up** more than one level."
+  },
+  {
+    "number": 6,
+    "title": "Neighboring",
+    "definition": "Each space has up to eight spaces surrounding it. These are called **neighboring** spaces."
+  },
+  {
+    "number": 7,
+    "title": "Occupied Space",
+    "definition": "A space containing a **Worker** or **dome**."
+  },
+  {
+    "number": 8,
+    "title": "Perimeter Space",
+    "definition": "One of the 16 spaces along the edge of the board"
+  },
+  {
+    "number": 9,
+    "title": "Token",
+    "definition": "A marker specific to a **God** or **Hero Power**. You cannot place a **Token** ontoa space that is occupied or contains another **Token**. Remove **Tokens** from the board when **blocks** are placed upon them."
+  },
+  {
+    "number": 10,
+    "title": "Unmoved Worker",
+    "definition": "A ** Worker** that did not move on your turn."
+  },
+  {
+    "number": 11,
+    "title": "Unoccupied Space",
+    "definition": "A space not containing a **Worker** or **dome**."
+  },
+  {
+    "number": 12,
+    "title": "Win",
+    "definition": "If one of your **Workers moves up** on top of **level 3** during your turn, you instantly win! \n\u200b \n\u200b You __must__ always perform a **move** then **build** on your turn. If you are unable to, you lose. "
+  }
+]

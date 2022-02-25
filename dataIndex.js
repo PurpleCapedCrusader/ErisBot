@@ -68,6 +68,22 @@ const slashIndex = [
     "nyx",
 ]
 
+const definitionIndex = [
+    "block",
+    "build",
+    "complete_tower",
+    "dome",
+    "force",
+    "move",
+    "neighboring",
+    "occupied_space",
+    "perimeter_space",
+    "token",
+    "unmoved_worker",
+    "unoccupied_space",
+    "win"
+]
 module.exports = {
-    slashIndex: slashIndex
+    slashIndex: slashIndex,
+    definitionIndex: definitionIndex
 };
